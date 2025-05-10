@@ -8,7 +8,7 @@
 
     <changeSet id="003" author="t0khyo">
         <createTable tableName="payment_integration_type">
-            <column name="id" type="INT" autoIncrement="true">
+            <column name="payment_integration_type_id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
