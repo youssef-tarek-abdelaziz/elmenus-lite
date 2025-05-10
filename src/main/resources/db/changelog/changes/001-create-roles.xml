@@ -18,11 +18,11 @@
 
             <column name="permissions" type="JSONB"/>
 
-            <column name="created_at" type="TIMESTAMPTZ" defaultValue="NOW()">
+            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="updated_at" type="TIMESTAMPTZ" defaultValue="NOW()">
+            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 
