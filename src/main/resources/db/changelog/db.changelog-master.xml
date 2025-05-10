@@ -4,6 +4,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <include file="db/changelog/changes/initial-schema.xml"/>
+    <include file="db/changelog/changes/001-create-roles.xml"/>
+    <include file="db/changelog/changes/002-create-user_type.xml"/>
+    <include file="db/changelog/changes/003-create-payment_integration_type.xml"/>
+    <include file="db/changelog/changes/004-create-order_status.xml"/>
+    <include file="db/changelog/changes/005-create-transaction_status.xml"/>
+    <include file="db/changelog/changes/006-create-payment_method.xml"/>
+    <include file="db/changelog/changes/007-create-category.xml"/>
 
 </databaseChangeLog>
