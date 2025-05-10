@@ -18,4 +18,10 @@
     <include file="db/changelog/changes/009-create-user_role.xml"/>
     <include file="db/changelog/changes/010-create-customer.xml"/>
 
+    <include file="db/changelog/changes/011-create-restaurant.xml"/>
+    <include file="db/changelog/changes/012-create-restaurant_category.xml"/>
+    <include file="db/changelog/changes/013-create-restaurant_details.xml"/>
+    <include file="db/changelog/changes/014-create-menu.xml"/>
+    <include file="db/changelog/changes/015-create-menu_item.xml"/>
+
 </databaseChangeLog>
