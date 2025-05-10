@@ -12,4 +12,8 @@
     <include file="db/changelog/changes/006-create-payment_method.xml"/>
     <include file="db/changelog/changes/007-create-category.xml"/>
 
+    <include file="db/changelog/changes/008-create-users.xml"/>
+    <include file="db/changelog/changes/009-create-user_role.xml"/>
+    <include file="db/changelog/changes/010-create-customer.xml"/>
+
 </databaseChangeLog>
