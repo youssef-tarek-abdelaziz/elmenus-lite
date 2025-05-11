@@ -6,27 +6,41 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="015" author="t0khyo">
-        <createTable tableName="menu_item">
-            <column name="menu_item_id" type="INT" autoIncrement="true">
+    <changeSet id="016" author="t0khyo">
+        <createTable tableName="address">
+            <column name="address_id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="menu_id" type="INT">
+            <column name="customer_id" type="INT">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="menu_item_name" type="VARCHAR(50)">
+            <column name="label" type="VARCHAR(50)"/>
+
+            <column name="street" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="price" type="NUMERIC(10,2)">
+            <column name="city" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="available" type="BOOLEAN" defaultValue="TRUE">
-                <constraints nullable="false"/>
-            </column>
+            <column name="floor" type="VARCHAR(50)"/>
+
+            <column name="apartment" type="VARCHAR(50)"/>
+
+            <column name="additional_direction" type="TEXT"/>
+
+            <column name="state" type="VARCHAR(50)"/>
+
+            <column name="country" type="VARCHAR(50)"/>
+
+            <column name="zip_code" type="VARCHAR(10)"/>
+
+            <column name="is_default" type="BOOLEAN" defaultValue="false"/>
+
+            <column name="location" type="GEOGRAPHY(Point,4326)"/>
 
             <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
@@ -47,18 +61,11 @@
 
         <!-- === CONSTRAINTS === -->
         <addForeignKeyConstraint
-                baseTableName="menu_item"
-                baseColumnNames="menu_id"
-                constraintName="fk_menu_item_menu"
-                referencedTableName="menu"
-                referencedColumnNames="menu_id"
-                onDelete="CASCADE"
+                baseTableName="address"
+                baseColumnNames="customer_id"
+                constraintName="fk_address_customer"
+                referencedTableName="customer"
+                referencedColumnNames="customer_id"
         />
-
-        <sql>
-            ALTER TABLE menu_item
-            ADD CONSTRAINT chk_menu_item_price_positive CHECK (price > 0);
-        </sql>
-
     </changeSet>
 </databaseChangeLog>
