@@ -10,8 +10,5 @@
         <sql>
             CREATE EXTENSION IF NOT EXISTS "postgis";
         </sql>
-        <sql>
-            CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-        </sql>
     </changeSet>
 </databaseChangeLog>
