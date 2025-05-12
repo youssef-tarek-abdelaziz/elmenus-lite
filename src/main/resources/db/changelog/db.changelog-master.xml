@@ -37,4 +37,8 @@
     <include file="db/changelog/changes/025-create-transactions.xml"/>
     <include file="db/changelog/changes/026-create-transaction_details.xml"/>
 
+    <include file="db/changelog/changes/027-create-review.xml"/>
+    <include file="db/changelog/changes/028-create-audit_type.xml"/>
+    <include file="db/changelog/changes/029-create-auditing.xml"/>
+
 </databaseChangeLog>
