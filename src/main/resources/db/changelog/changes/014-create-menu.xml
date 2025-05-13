@@ -18,11 +18,11 @@
 
             <column name="menu_name" type="VARCHAR(100)"/>
 
-            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
+            <column name="created_at" type="datetime" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
+            <column name="updated_at" type="datetime" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 

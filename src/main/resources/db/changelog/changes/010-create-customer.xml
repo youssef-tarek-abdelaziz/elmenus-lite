@@ -21,11 +21,11 @@
             <!--  Gender codes based on ISO/IEC 5218: 0=Unspecified, 1=Male, 2=Female  -->
             <column name="gender" type="SMALLINT"/>
 
-            <column name="created_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
+            <column name="created_at" type="datetime" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="updated_at" type="TIMESTAMPTZ" defaultValueComputed="NOW()">
+            <column name="updated_at" type="datetime" defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
             </column>
 
