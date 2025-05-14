@@ -20,6 +20,7 @@ public class UserModel extends AuditingFields implements Serializable {
 //    @ManyToOne
 //    @JoinColumn(name = "user_type_id", nullable = false)
 //    private UserTypeModel userType;
+// Test line
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
