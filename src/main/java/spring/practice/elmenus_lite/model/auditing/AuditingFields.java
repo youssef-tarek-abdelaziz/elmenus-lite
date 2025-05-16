@@ -20,8 +20,8 @@ public abstract class AuditingFields {
     @LastModifiedDate
     private LocalDateTime updatedAt = LocalDateTime.now();
     @CreatedBy
-    private String createdBy;
+    private String createdBy = "system";
     @LastModifiedBy
-    private String updatedBy;
+    private String updatedBy = "system";
 
 }

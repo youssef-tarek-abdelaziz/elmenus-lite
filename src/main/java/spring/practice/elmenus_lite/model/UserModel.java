@@ -1,15 +1,19 @@
 package spring.practice.elmenus_lite.model;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
+//Test below
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserModel extends AuditingFields implements Serializable {
 
     @Id
@@ -17,10 +21,9 @@ public class UserModel extends AuditingFields implements Serializable {
     @Column(name = "user_id")
     private Integer id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_type_id", nullable = false)
-//    private UserTypeModel userType;
-// Test line
+    @ManyToOne
+    @JoinColumn(name = "user_type_id", nullable = false)
+    private UserTypeModel userType;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -38,7 +41,7 @@ public class UserModel extends AuditingFields implements Serializable {
     private String fullName;
 
     @Column(name = "last_login")
-    private java.time.OffsetDateTime lastLogin;
+    private OffsetDateTime lastLogin;
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
