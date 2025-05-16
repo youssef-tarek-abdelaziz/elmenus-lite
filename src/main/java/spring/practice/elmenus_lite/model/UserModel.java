@@ -6,21 +6,22 @@ import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
 
-@Entity
-@Table(name = "users")
+
 @Getter
 @Setter
+@Entity
+@Table(name = "users")
 public class UserModel extends AuditingFields implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer id;
+    private Integer userId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_type_id", nullable = false)
-//    private UserTypeModel userType;
-// Test line
+    @ManyToOne
+    @JoinColumn(name = "user_type_id", nullable = false)
+    private UserTypeModel userType;
+
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
