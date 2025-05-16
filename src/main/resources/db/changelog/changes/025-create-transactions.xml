@@ -8,7 +8,7 @@
 
     <changeSet id="025" author="t0khyo">
         <createTable tableName="transactions">
-            <column name="transaction_id" type="UUID" defaultValueComputed="gen_random_uuid()">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -21,6 +21,10 @@
             </column>
 
             <column name="transaction_status_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="transaction_details_id" type="INT">
                 <constraints nullable="false"/>
             </column>
 
@@ -55,8 +59,8 @@
                 baseTableName="transactions"
                 baseColumnNames="order_id"
                 constraintName="fk_transactions_order"
-                referencedTableName="orders"
-                referencedColumnNames="order_id"
+                referencedTableName="order"
+                referencedColumnNames="id"
         />
 
         <addForeignKeyConstraint
@@ -64,7 +68,7 @@
                 baseColumnNames="payment_method_id"
                 constraintName="fk_transactions_payment_method"
                 referencedTableName="payment_method"
-                referencedColumnNames="payment_method_id"
+                referencedColumnNames="id"
         />
 
         <addForeignKeyConstraint
@@ -72,7 +76,16 @@
                 baseColumnNames="transaction_status_id"
                 constraintName="fk_transactions_transaction_status"
                 referencedTableName="transaction_status"
-                referencedColumnNames="transaction_status_id"
+                referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="transactions"
+                baseColumnNames="transaction_details_id"
+                constraintName="fk_transaction_details_transaction"
+                referencedTableName="transaction_details"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
         />
     </changeSet>
 </databaseChangeLog>

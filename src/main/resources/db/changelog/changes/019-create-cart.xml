@@ -8,7 +8,7 @@
 
     <changeSet id="019" author="t0khyo">
         <createTable tableName="cart">
-            <column name="cart_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -39,7 +39,7 @@
                 baseColumnNames="customer_id"
                 constraintName="fk_cart_customer"
                 referencedTableName="customer"
-                referencedColumnNames="customer_id"
+                referencedColumnNames="id"
                 onDelete="CASCADE"
         />
     </changeSet>

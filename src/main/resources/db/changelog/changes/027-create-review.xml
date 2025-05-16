@@ -49,7 +49,7 @@
                 baseColumnNames="restaurant_id"
                 constraintName="fk_review_restaurant"
                 referencedTableName="restaurant"
-                referencedColumnNames="restaurant_id"
+                referencedColumnNames="id"
         />
 
         <addForeignKeyConstraint
@@ -57,7 +57,7 @@
                 baseColumnNames="customer_id"
                 constraintName="fk_review_customer"
                 referencedTableName="customer"
-                referencedColumnNames="customer_id"
+                referencedColumnNames="id"
         />
 
         <sql>

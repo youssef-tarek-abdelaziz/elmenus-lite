@@ -8,7 +8,7 @@
 
     <changeSet id="029" author="t0khyo">
         <createTable tableName="auditing">
-            <column name="audit_id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -41,7 +41,7 @@
                 baseColumnNames="audit_type_id"
                 constraintName="fk_auditing_audit_type"
                 referencedTableName="audit_type"
-                referencedColumnNames="audit_type_id"
+                referencedColumnNames="id"
         />
     </changeSet>
 </databaseChangeLog>

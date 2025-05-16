@@ -63,6 +63,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+		<!-- Hibernate Spatial for PostgreSQL -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-spatial</artifactId>
+			<version>6.6.13.Final</version> <!-- Match your Hibernate version -->
+		</dependency>
 	</dependencies>
 
 	<build>

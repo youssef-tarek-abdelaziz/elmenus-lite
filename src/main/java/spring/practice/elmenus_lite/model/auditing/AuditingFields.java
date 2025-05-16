@@ -22,21 +22,9 @@ public abstract class AuditingFields {
     @LastModifiedDate
     private LocalDateTime updatedAt = LocalDateTime.now();
     @CreatedBy
-    private String createdBy;
+    private String createdBy = "system";
     @LastModifiedBy
-    private String updatedBy;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        if (this.createdBy == null) {
-            this.createdBy = "system";
-        }
-        if (this.updatedBy == null) {
-            this.updatedBy = "system";
-        }
-    }
+    private String updatedBy = "system";
 
     @PreUpdate
     protected void onUpdate() {

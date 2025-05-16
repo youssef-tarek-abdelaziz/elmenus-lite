@@ -10,6 +10,7 @@ import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "role")
@@ -19,10 +20,11 @@ import java.util.List;
 public class RoleModel extends AuditingFields implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Integer roleId;
+    private Integer id;
 
-    @Column(name = "role_name" , nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String roleName;
 
+    @OneToMany(mappedBy = "role")
+    private Set<UserRoleModel> userRoles;
 }

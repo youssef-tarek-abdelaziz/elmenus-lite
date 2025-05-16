@@ -7,26 +7,23 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
-@Table(name = "cart")
+@Table(name = "menu")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class CartModel extends AuditingFields implements Serializable {
+public class MenuItemModel extends AuditingFields implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private CustomerModel customer;
+    @JoinColumn(name = "menu_id", nullable = false)
+    private MenuModel menuModel;
 
-    @OneToMany(mappedBy = "cart")
-    private Set<CartItemModel> cartItems;
+    private String menuItemName;
+    private Integer price;
+    private boolean available;
 }

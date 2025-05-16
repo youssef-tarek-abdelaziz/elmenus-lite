@@ -2,24 +2,24 @@ package spring.practice.elmenus_lite.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
 
 @Entity
-@Table(name = "user_type")
+@Table(name = "restaurant")
 @Getter
 @Setter
-@RequiredArgsConstructor
-public class UserTypeModel extends AuditingFields implements Serializable {
-
+@EntityListeners(AuditingEntityListener.class)
+public class RestaurantModel extends AuditingFields implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String userTypeName;
-}
+    private String restaurantName;
 
+    private boolean active;
+
+}
