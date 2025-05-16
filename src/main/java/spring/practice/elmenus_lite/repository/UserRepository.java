@@ -7,8 +7,7 @@ import spring.practice.elmenus_lite.model.UserModel;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends
-        JpaRepository<UserModel, Integer> {
+public interface UserRepository extends JpaRepository<UserModel, Integer> {
     Optional<UserModel> findUserByEmail(String email);
 
 }

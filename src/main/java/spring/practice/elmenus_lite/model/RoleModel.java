@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -25,7 +25,4 @@ public class RoleModel extends AuditingFields implements Serializable {
     @Column(name = "role_name" , nullable = false, unique = true, length = 50)
     private String roleName;
 
-    @Column(name = "permissions", columnDefinition = "jsonb")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<String> permissions;
 }

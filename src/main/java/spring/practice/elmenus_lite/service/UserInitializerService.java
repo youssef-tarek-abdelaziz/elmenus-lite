@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import spring.practice.elmenus_lite.model.*;
 import spring.practice.elmenus_lite.repository.RoleRepository;
 import spring.practice.elmenus_lite.repository.UserRepository;
-import spring.practice.elmenus_lite.repository.UserRoleRepository;
 import spring.practice.elmenus_lite.repository.UserTypeRepository;
 
 import java.time.LocalDateTime;
@@ -17,7 +16,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class UserInitializerService {
 
-    private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
     private final UserTypeRepository userTypeRepository;
     private final UserRepository userRepository;
@@ -47,7 +45,6 @@ public class UserInitializerService {
                     newRole.setCreatedBy("System");
                     newRole.setUpdatedBy("System");
                     newRole.setRoleName("USER");
-                    newRole.setPermissions(Arrays.asList("READ", "WRITE", "DELETE"));
                     return roleRepository.save(newRole);
                 });
 
@@ -70,30 +67,6 @@ public class UserInitializerService {
                     return userRepository.save(newUser);
                 });
 
-        // 4. Add UserRole if not exists
-        UserRoleId userRoleId = new UserRoleId(user.getUserId(), role.getRoleId());
-        boolean roleExists = userRoleRepository.existsById(userRoleId);
-
-        if (!roleExists) {
-            UserRoleModel userRole = new UserRoleModel();
-            userRole.setId(userRoleId);
-            userRole.setUserModel(user);
-            userRole.setRoleModel(role);
-            userRoleRepository.save(userRole);
-        } else {
-            System.out.println("User already has this Role");
-        }
-
-
-
-
-
     }
-
-
-
-
-
-
 
 }

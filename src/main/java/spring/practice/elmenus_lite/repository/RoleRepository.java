@@ -7,7 +7,8 @@ import spring.practice.elmenus_lite.model.RoleModel;
 import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends
-        JpaRepository<RoleModel, Integer> {
+public interface RoleRepository extends JpaRepository<RoleModel, Integer> {
+
     Optional<RoleModel> findByRoleName(String roleName);
+
 }
