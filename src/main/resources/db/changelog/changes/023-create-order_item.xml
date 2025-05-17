@@ -8,7 +8,7 @@
 
     <changeSet id="023" author="t0khyo">
         <createTable tableName="order_item">
-            <column name="order_item_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -49,9 +49,9 @@
         <addForeignKeyConstraint
                 baseTableName="order_item"
                 baseColumnNames="order_id"
-                constraintName="fk_order_item_orders"
-                referencedTableName="orders"
-                referencedColumnNames="order_id"
+                constraintName="fk_order_item_order"
+                referencedTableName="order"
+                referencedColumnNames="id"
                 onDelete="CASCADE"
         />
 
@@ -60,7 +60,7 @@
                 baseColumnNames="menu_item_id"
                 constraintName="fk_order_item_menu_item"
                 referencedTableName="menu_item"
-                referencedColumnNames="menu_item_id"
+                referencedColumnNames="id"
         />
 
         <sql>

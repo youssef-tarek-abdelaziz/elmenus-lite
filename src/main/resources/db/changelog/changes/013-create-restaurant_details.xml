@@ -8,7 +8,7 @@
 
     <changeSet id="013" author="t0khyo">
         <createTable tableName="restaurant_details">
-            <column name="restaurant_details_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -57,7 +57,7 @@
                 baseColumnNames="restaurant_id"
                 constraintName="fk_restaurant_details_restaurant"
                 referencedTableName="restaurant"
-                referencedColumnNames="restaurant_id"
+                referencedColumnNames="id"
                 onDelete="CASCADE"
         />
     </changeSet>

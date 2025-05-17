@@ -8,7 +8,7 @@
 
     <changeSet id="010" author="t0khyo">
         <createTable tableName="customer">
-            <column name="customer_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -43,8 +43,8 @@
                 baseTableName="customer"
                 baseColumnNames="user_id"
                 constraintName="fk_customer_user"
-                referencedTableName="users"
-                referencedColumnNames="user_id"
+                referencedTableName="user"
+                referencedColumnNames="id"
         />
     </changeSet>
 </databaseChangeLog>

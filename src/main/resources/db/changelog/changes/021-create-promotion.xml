@@ -8,7 +8,7 @@
 
     <changeSet id="021" author="t0khyo">
         <createTable tableName="promotion">
-            <column name="promotion_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 

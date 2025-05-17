@@ -7,8 +7,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="001" author="t0khyo">
-        <createTable tableName="roles">
-            <column name="role_id" type="INT" autoIncrement="true">
+        <createTable tableName="role">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 

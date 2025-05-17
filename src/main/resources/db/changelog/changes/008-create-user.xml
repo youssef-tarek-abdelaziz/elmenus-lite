@@ -7,8 +7,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="008" author="t0khyo">
-        <createTable tableName="users">
-            <column name="user_id" type="INT" autoIncrement="true">
+        <createTable tableName="user">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -56,11 +56,11 @@
         </createTable>
 
         <addForeignKeyConstraint
-                baseTableName="users"
+                baseTableName="user"
                 baseColumnNames="user_type_id"
-                constraintName="fk_users_user_type"
+                constraintName="fk_user_user_type"
                 referencedTableName="user_type"
-                referencedColumnNames="user_type_id"
+                referencedColumnNames="id"
         />
     </changeSet>
 </databaseChangeLog>

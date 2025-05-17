@@ -8,7 +8,7 @@
 
     <changeSet id="017" author="t0khyo">
         <createTable tableName="payment_type_config">
-            <column name="payment_type_config_id" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -49,7 +49,7 @@
                 baseColumnNames="payment_integration_type_id"
                 constraintName="fk_payment_type_config_payment_integration_type"
                 referencedTableName="payment_integration_type"
-                referencedColumnNames="payment_integration_type_id"
+                referencedColumnNames="id"
         />
     </changeSet>
 </databaseChangeLog>

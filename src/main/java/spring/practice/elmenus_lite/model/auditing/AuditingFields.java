@@ -1,6 +1,8 @@
 package spring.practice.elmenus_lite.model.auditing;
 
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -20,8 +22,18 @@ public abstract class AuditingFields {
     @LastModifiedDate
     private LocalDateTime updatedAt = LocalDateTime.now();
     @CreatedBy
-    private String createdBy;
+    private String createdBy = "system";
     @LastModifiedBy
-    private String updatedBy;
+    private String updatedBy = "system";
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+        if (this.updatedBy == null) {
+            this.updatedBy = "system";
+        }
+    }
 
 }
+
+
