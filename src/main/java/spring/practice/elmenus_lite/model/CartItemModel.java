@@ -1,6 +1,5 @@
 package spring.practice.elmenus_lite.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import java.io.Serializable;
 @Table(name = "cart_item")
 @Getter
 @Setter
-@JsonIgnoreProperties({"cart", "customer"})
 public class CartItemModel extends AuditingFields implements Serializable {
 
     @Id
