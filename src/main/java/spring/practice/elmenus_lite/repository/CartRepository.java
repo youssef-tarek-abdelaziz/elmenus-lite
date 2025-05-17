@@ -7,4 +7,5 @@ import spring.practice.elmenus_lite.model.CartModel;
 
 @Repository
 public interface CartRepository extends JpaRepository<CartModel, Long> {
+
 }
