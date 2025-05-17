@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 import spring.practice.elmenus_lite.model.CartItemModel;
 import spring.practice.elmenus_lite.model.MenuItemModel;
 
+import java.util.List;
+
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItemModel, Integer> {
+    List<MenuItemModel> findAllByIdIn(List<Integer> menuItemsIds);
 }
