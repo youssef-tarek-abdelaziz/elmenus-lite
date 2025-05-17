@@ -7,9 +7,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
