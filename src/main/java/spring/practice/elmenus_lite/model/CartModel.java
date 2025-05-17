@@ -27,6 +27,6 @@ public class CartModel extends AuditingFields implements Serializable {
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerModel customer;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE)
     private Set<CartItemModel> cartItems;
 }

@@ -9,5 +9,6 @@ import java.util.Set;
 public class SharedUtil {
     public <T> Set<T> syncTheSet(Set<T> oldItems) {
 //        List<Integer> oldItemsIds = oldItems.stream().map(oldItem -> oldItem.get)
+        return null;
     }
 }

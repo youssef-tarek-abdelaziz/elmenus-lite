@@ -9,7 +9,7 @@ import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "menu_item")
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)

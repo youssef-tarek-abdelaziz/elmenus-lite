@@ -2,6 +2,8 @@ package spring.practice.elmenus_lite.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import spring.practice.elmenus_lite.exception.BadRequestException;
 import spring.practice.elmenus_lite.exception.EntityNotFoundException;
 import spring.practice.elmenus_lite.model.CartItemModel;
 import spring.practice.elmenus_lite.model.CartModel;
@@ -10,7 +12,7 @@ import spring.practice.elmenus_lite.repository.CartRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +21,16 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
 
+    @Transactional(readOnly = true)
+    public Set<CartItemModel> getAllItems(Integer cartId) {
+        CartModel cartModel = cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(cartId)));
+        return cartModel.getCartItems();
+    }
+
     public List<CartItemModel> updateCartItems(Integer cartId, List<CartItemModel> cartItems) {
-        Optional<CartModel> cartModelOptional = cartRepository.findById(cartId);
-        CartModel cartModel = cartModelOptional.orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getMessage()));
+//        Optional<CartModel> cartModelOptional = cartRepository.findById(cartId);
+//        CartModel cartModel = cartModelOptional.orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getMessage()));
 
 //        Set<CartItemModel> oldItems = cartModel.getCartItems();
 //        oldItems.addAll(cartItems);
@@ -33,6 +42,26 @@ public class CartService {
 //                        && oldItem.getQuantity().equals(newItem.getQuantity())))
 //                .collect(Collectors.toSet());
         return null;
+    }
 
+    @Transactional
+    public void deleteCart(Integer cartId){
+
+        CartModel cartModel = cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(cartId)));
+//        if(!cartModel.getCartItems().isEmpty()) {
+//            cartItemRepository.deleteAll(cartModel.getCartItems());
+//        }
+        cartRepository.delete(cartModel);
+    }
+
+    public void clearCart(Integer cartId) {
+
+        CartModel cartModel = cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(cartId)));
+        if(cartModel.getCartItems().isEmpty()) {
+            throw new BadRequestException(ErrorMessage.EMPTY_CART.getFinalMessage(cartId));
+        }
+        cartItemRepository.deleteAll(cartModel.getCartItems());
     }
 }
