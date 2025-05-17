@@ -8,6 +8,7 @@ import lombok.ToString;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cart_item")
@@ -31,5 +32,17 @@ public class CartItemModel extends AuditingFields implements Serializable {
     @Min(value = 1, message = "Quantity must be at least 1")
     @Column(nullable = false)
     private Integer quantity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItemModel that = (CartItemModel) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
 
