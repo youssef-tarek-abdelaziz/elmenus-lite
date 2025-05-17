@@ -8,7 +8,7 @@
 
     <changeSet id="018" author="t0khyo">
         <createTable tableName="preferred_payment_setting">
-            <column name="preferred_payment_setting" type="INT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -43,7 +43,7 @@
                 baseColumnNames="customer_id"
                 constraintName="pk_preferred_payment_setting_customer"
                 referencedTableName="customer"
-                referencedColumnNames="customer_id"
+                referencedColumnNames="id"
                 onDelete="CASCADE"
         />
 
@@ -52,7 +52,7 @@
                 baseColumnNames="payment_type_config_id"
                 constraintName="pk_preferred_payment_setting_payment_type_config"
                 referencedTableName="payment_type_config"
-                referencedColumnNames="payment_type_config_id"
+                referencedColumnNames="id"
         />
     </changeSet>
 </databaseChangeLog>
