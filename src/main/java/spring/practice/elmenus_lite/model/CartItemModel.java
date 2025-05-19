@@ -37,12 +37,12 @@ public class CartItemModel extends AuditingFields implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         CartItemModel that = (CartItemModel) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(menuItem, that.menuItem);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, menuItem);
     }
 }
 

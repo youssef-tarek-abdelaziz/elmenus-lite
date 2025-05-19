@@ -18,4 +18,9 @@ public class ApiResponse<T> {
     public ApiResponse(String statusMessage) {
         this(statusMessage, null);
     }
+
+    public ApiResponse(T data) {
+        this(null, data);
+    }
+
 }
