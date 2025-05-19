@@ -3,6 +3,8 @@ package spring.practice.elmenus_lite.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.practice.elmenus_lite.apiDto.CartItemResponseApiDto;
+import spring.practice.elmenus_lite.apiDto.CartResponseApiDto;
 import spring.practice.elmenus_lite.dto.CartItemDto;
 import spring.practice.elmenus_lite.exception.BadRequestException;
 import spring.practice.elmenus_lite.exception.EntityNotFoundException;
@@ -15,6 +17,7 @@ import spring.practice.elmenus_lite.repository.CartRepository;
 import spring.practice.elmenus_lite.repository.MenuItemRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,10 +32,20 @@ public class CartService {
     private final CartModelDtoMapper cartModelDtoMapper;
 
     @Transactional(readOnly = true)
-    public Set<CartItemModel> getAllItems(Integer cartId) {
-        CartModel cartModel = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
-        return cartModel.getCartItems();
+    public CartResponseApiDto getAllItems(Integer cartId) {
+        CartModel cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
+
+        List<CartItemResponseApiDto> items = cartModelDtoMapper
+                .toCartItemResponseApiDtoList(new ArrayList<>(cart.getCartItems()));
+
+        CartResponseApiDto response = new CartResponseApiDto();
+        response.setId(cart.getId());
+        response.setCartItemApiDtoList(items);
+        response.setTotalPrice(cartModelDtoMapper.calculateTotalPrice(items));
+
+        return response;
     }
 
     public List<CartItemModel> updateCartItems(Integer cartId, List<CartItemModel> cartItems) {

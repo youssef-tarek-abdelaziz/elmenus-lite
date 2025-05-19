@@ -2,6 +2,7 @@ package spring.practice.elmenus_lite.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import spring.practice.elmenus_lite.apiDto.CartItemResponseApiDto;
 import spring.practice.elmenus_lite.dto.CartItemDto;
 import spring.practice.elmenus_lite.helperannotations.AuditingFieldsIgnore;
 import spring.practice.elmenus_lite.model.CartItemModel;
@@ -16,6 +17,16 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class CartModelDtoMapper {
+
+    @Mapping(target = "menuItemName", source = "menuItem.menuItemName")
+    @Mapping(target = "totalPrice", expression = "java(item.getMenuItem().getPrice() * item.getQuantity())")
+    public abstract CartItemResponseApiDto toCartItemResponseApiDto(CartItemModel item);
+
+    public abstract List<CartItemResponseApiDto> toCartItemResponseApiDtoList(List<CartItemModel> items);
+
+    public Integer calculateTotalPrice(List<CartItemResponseApiDto> items) {
+        return items.stream().mapToInt(CartItemResponseApiDto::getTotalPrice).sum();
+    }
 
     @Mapping(target = "id", source = "cartItemDto.id")
     @AuditingFieldsIgnore
