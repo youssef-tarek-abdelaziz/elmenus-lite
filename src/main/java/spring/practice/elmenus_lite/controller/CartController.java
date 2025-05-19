@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.practice.elmenus_lite.apiDto.CartItemRequestApiDto;
+import spring.practice.elmenus_lite.apiDto.CartResponseApiDto;
 import spring.practice.elmenus_lite.dto.CartItemDto;
 import spring.practice.elmenus_lite.mapper.CartApiDtoMapper;
 import spring.practice.elmenus_lite.model.CartItemModel;
@@ -23,8 +24,8 @@ public class CartController {
     private final CartApiDtoMapper cartApiDtoMapper;
 
     @GetMapping(path = "{id}/items")
-    public ResponseEntity<Set<CartItemModel>> getCartItems(@PathVariable("id") Integer id){
-        Set<CartItemModel> cartItems = cartService.getAllItems(id);
+    public ResponseEntity<CartResponseApiDto> getCartItems(@PathVariable("id") Integer id){
+        CartResponseApiDto cartItems = cartService.getAllItems(id);
         return ResponseEntity.ok().body(cartItems);
     }
 
