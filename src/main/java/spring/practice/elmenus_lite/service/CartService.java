@@ -3,9 +3,9 @@ package spring.practice.elmenus_lite.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.practice.elmenus_lite.apiDto.CartItemResponseApiDto;
-import spring.practice.elmenus_lite.apiDto.CartResponseApiDto;
 import spring.practice.elmenus_lite.dto.CartItemDto;
+import spring.practice.elmenus_lite.dto.CartItemResponseDto;
+import spring.practice.elmenus_lite.dto.CartResponseDto;
 import spring.practice.elmenus_lite.exception.BadRequestException;
 import spring.practice.elmenus_lite.exception.EntityNotFoundException;
 import spring.practice.elmenus_lite.mapper.CartModelDtoMapper;
@@ -14,12 +14,10 @@ import spring.practice.elmenus_lite.model.CartModel;
 import spring.practice.elmenus_lite.model.MenuItemModel;
 import spring.practice.elmenus_lite.repository.CartItemRepository;
 import spring.practice.elmenus_lite.repository.CartRepository;
-import spring.practice.elmenus_lite.repository.MenuItemRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
+import spring.practice.elmenus_lite.util.CartItemValidator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,79 +25,56 @@ public class CartService {
 
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
-    private final MenuItemRepository menuItemRepository;
-
     private final CartModelDtoMapper cartModelDtoMapper;
+    private final CartItemValidator cartItemValidator;
 
     @Transactional(readOnly = true)
-    public CartResponseApiDto getAllItems(Integer cartId) {
+    public CartResponseDto getAllItems(Integer cartId) {
         CartModel cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
 
-        List<CartItemResponseApiDto> items = cartModelDtoMapper
-                .toCartItemResponseApiDtoList(new ArrayList<>(cart.getCartItems()));
-
-        CartResponseApiDto response = new CartResponseApiDto();
-        response.setId(cart.getId());
-        response.setCartItemApiDtoList(items);
-        response.setTotalPrice(cartModelDtoMapper.calculateTotalPrice(items));
-
-        return response;
-    }
-
-    public List<CartItemModel> updateCartItems(Integer cartId, List<CartItemModel> cartItems) {
-//        Optional<CartModel> cartModelOptional = cartRepository.findById(cartId);
-//        CartModel cartModel = cartModelOptional.orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getMessage()));
-
-//        Set<CartItemModel> oldItems = cartModel.getCartItems();
-//        oldItems.addAll(cartItems);
-//        oldItems.removeAll(oldItems.stream().filter(oldItem -> oldItem.get))
-//        oldItems.stream()
-//                .filter(oldItem -> cartItems
-//                        .stream()
-//                        .noneMatch(newItem -> newItem.getMenuItem().equals(oldItem.getMenuItem())
-//                        && oldItem.getQuantity().equals(newItem.getQuantity())))
-//                .collect(Collectors.toSet());
-        return null;
+        List<CartItemResponseDto> items = cartModelDtoMapper
+                .toCartItemResponseDtoList(new ArrayList<>(cart.getCartItems()));
+        return cartModelDtoMapper.maptoCartResponseDto(cartId, items);
     }
 
     @Transactional
-    public void deleteCart(Integer cartId){
-
-        CartModel cartModel = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
-//        if(!cartModel.getCartItems().isEmpty()) {
-//            cartItemRepository.deleteAll(cartModel.getCartItems());
-//        }
-        cartRepository.delete(cartModel);
-    }
-
     public void clearCart(Integer cartId) {
 
         CartModel cartModel = cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
+
         if(cartModel.getCartItems().isEmpty()) {
             throw new BadRequestException(ErrorMessage.EMPTY_CART.getFinalMessage(List.of(cartId)));
         }
-        cartItemRepository.deleteAll(cartModel.getCartItems());
+        List<Integer> itemsIds = cartModel.getCartItems().stream().map(CartItemModel::getId).toList();
+        cartItemRepository.deleteAllByIdInBatch(itemsIds);
     }
 
     @Transactional
     public void addItemsToCart(Integer cartId, List<CartItemDto> cartItemDtos) {
         CartModel cartModel = cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
-        List<Integer> menuItemsIds = cartItemDtos.stream().map(CartItemDto::getMenuItemId).toList();
-        List<MenuItemModel> menuItemModels = menuItemRepository.findAllByIdIn(menuItemsIds);
-        List<Integer> menusIdsNotExist = menuItemsIds.stream()
-                .mapToInt(Integer::intValue)
-                .filter(menuItemsId -> menuItemModels.stream()
-                        .noneMatch(menuItemModel -> menuItemModel.getId().equals(menuItemsId)))
-                .boxed().toList();
-        if(!menusIdsNotExist.isEmpty()) {
-            throw new BadRequestException(ErrorMessage.MENU_ITEM_IS_NOT_EXIST.getFinalMessage(menusIdsNotExist));
+
+        List<MenuItemModel> menuItemModels = cartItemValidator.validateMenuItems(cartItemDtos);
+        Set<CartItemModel> existingItems = cartModel.getCartItems();
+
+        for (CartItemDto newItem : cartItemDtos) {
+            Optional<CartItemModel> existingModel = existingItems.stream()
+                    .filter(existingItem -> existingItem.getId().equals(newItem.getId()) && !existingItem.getQuantity().equals(newItem.getQuantity()))
+                    .findFirst();
+            if(existingModel.isPresent()) {
+                existingItems.remove(existingModel.get());
+                existingModel.get().setQuantity(newItem.getQuantity());
+                existingItems.add(existingModel.get());
+            }
         }
-        List<CartItemModel> cartItemModels = cartModelDtoMapper.mapCartItemDtosToModels(cartItemDtos, cartModel, menuItemModels);
-        cartItemRepository.saveAll(cartItemModels);
+
+        List<Integer> removedItems = existingItems.stream().map(CartItemModel::getId).filter(existId -> cartItemDtos.stream().noneMatch(newItem -> existId.equals(newItem.getId()))).toList();
+        cartItemRepository.deleteAllByIdInBatch(removedItems);
+
+        List<CartItemDto> newItems = cartItemDtos.stream().filter(newItem -> newItem.getId() == null).toList();
+        existingItems.addAll(new HashSet<>(cartModelDtoMapper.mapCartItemDtosToModels(newItems, cartModel, menuItemModels)));
+        cartItemRepository.saveAll(existingItems);
     }
 }
