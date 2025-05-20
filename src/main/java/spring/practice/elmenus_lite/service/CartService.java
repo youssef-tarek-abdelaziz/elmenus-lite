@@ -32,12 +32,12 @@ public class CartService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public CartResponseDto getCartByUserId(Integer userId) {
-        UserModel user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(userId))));
+    public CartResponseDto getCartByUserId(Integer customerId) {
+        UserModel user = userRepository.findById(customerId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId))));
 
-        CartModel cartModel = cartRepository.findByCustomerId(userId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(userId))));
+        CartModel cartModel = cartRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId))));
 
         List<CartItemResponseDto> items = cartModelDtoMapper.toCartItemResponseDtoList(new ArrayList<>(cartModel.getCartItems()));
         return cartModelDtoMapper.maptoCartResponseDto(cartModel.getId(), items);
