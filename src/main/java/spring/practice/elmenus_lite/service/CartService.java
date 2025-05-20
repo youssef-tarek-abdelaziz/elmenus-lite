@@ -12,8 +12,10 @@ import spring.practice.elmenus_lite.mapper.CartModelDtoMapper;
 import spring.practice.elmenus_lite.model.CartItemModel;
 import spring.practice.elmenus_lite.model.CartModel;
 import spring.practice.elmenus_lite.model.MenuItemModel;
+import spring.practice.elmenus_lite.model.UserModel;
 import spring.practice.elmenus_lite.repository.CartItemRepository;
 import spring.practice.elmenus_lite.repository.CartRepository;
+import spring.practice.elmenus_lite.repository.UserRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
 import spring.practice.elmenus_lite.util.CartItemValidator;
 
@@ -27,6 +29,19 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartModelDtoMapper cartModelDtoMapper;
     private final CartItemValidator cartItemValidator;
+    private final UserRepository userRepository;
+
+    @Transactional(readOnly = true)
+    public CartResponseDto getCartByUserId(Integer userId) {
+        UserModel user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(userId))));
+
+        CartModel cartModel = cartRepository.findByCustomerId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(userId))));
+
+        List<CartItemResponseDto> items = cartModelDtoMapper.toCartItemResponseDtoList(new ArrayList<>(cartModel.getCartItems()));
+        return cartModelDtoMapper.maptoCartResponseDto(cartModel.getId(), items);
+    }
 
     @Transactional(readOnly = true)
     public CartResponseDto getAllItems(Integer cartId) {

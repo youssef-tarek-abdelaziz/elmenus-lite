@@ -22,6 +22,14 @@ public class CartController {
     private final CartService cartService;
     private final CartApiDtoMapper cartApiDtoMapper;
 
+    @GetMapping("{userId}")
+    public ResponseEntity<?> getCartByUserId(@PathVariable Integer userId) {
+        CartResponseDto cartDto = cartService.getCartByUserId(userId);
+        CartResponseApiDto cartResponseApiDto = cartApiDtoMapper.mapCartResponseDtoToApiDto(cartDto);
+        ApiResponse<?> response = new ApiResponse<>(cartResponseApiDto);
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping(path = "{id}/items")
     public ResponseEntity<?> getCartItems(@PathVariable("id") Integer id){
         CartResponseDto cartResponseDto = cartService.getAllItems(id);
