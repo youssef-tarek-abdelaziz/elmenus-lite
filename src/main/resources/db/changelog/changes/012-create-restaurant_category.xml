@@ -43,7 +43,7 @@
                 baseColumnNames="restaurant_id"
                 constraintName="fk_restaurant_category_restaurant"
                 referencedTableName="restaurant"
-                referencedColumnNames="restaurant_id"
+                referencedColumnNames="id"
                 onDelete="CASCADE"
         />
 
@@ -52,7 +52,7 @@
                 baseColumnNames="category_id"
                 constraintName="fk_restaurant_category_category"
                 referencedTableName="category"
-                referencedColumnNames="category_id"
+                referencedColumnNames="id"
                 onDelete="CASCADE"
         />
     </changeSet>
