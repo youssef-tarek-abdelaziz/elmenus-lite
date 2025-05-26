@@ -42,7 +42,7 @@ public class OrderModel extends AuditingFields implements Serializable {
     @JoinColumn(name = "order_tracking_id")
     private OrderTrackingModel orderTracking;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "promotion_id")
     private PromotionModel promotion;
 
