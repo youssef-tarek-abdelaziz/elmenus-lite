@@ -81,6 +81,43 @@ The application will be available at `http://localhost:8080`
 
 ## Development
 
+### Running with Docker
+
+The project includes Docker Compose configuration to easily set up the PostgreSQL database.
+
+#### Prerequisites
+
+- Docker and Docker Compose installed on your machine
+
+#### Starting the Database
+
+```bash
+# Start the PostgreSQL container
+docker-compose up -d postgres
+
+# To check the logs
+docker-compose logs -f postgres
+```
+
+This will start a PostgreSQL container with the following configuration:
+- Database: postgres
+- Schema: study
+- Username: postgres
+- Password: mysecretpassword
+- Port: 5432 (mapped to host)
+
+#### Stopping the Database
+
+```bash
+docker-compose down
+```
+
+To remove the volumes and delete all data:
+
+```bash
+docker-compose down -v
+```
+
 ### Building
 
 ```bash
