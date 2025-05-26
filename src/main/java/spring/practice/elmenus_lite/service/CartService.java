@@ -32,7 +32,7 @@ public class CartService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public CartResponseDto getCartByUserId(Integer customerId) {
+    public CartResponseDto getCartByCustomerId(Integer customerId) {
         UserModel user = userRepository.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId))));
 
