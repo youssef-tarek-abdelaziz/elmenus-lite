@@ -1,6 +1,7 @@
 package spring.practice.elmenus_lite.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.locationtech.jts.geom.Point;
@@ -13,6 +14,7 @@ import java.time.Duration;
 @Setter
 @Entity
 @Table(name = "order_tracking")
+@Builder
 public class OrderTrackingModel extends AuditingFields implements Serializable {
 
     @Id

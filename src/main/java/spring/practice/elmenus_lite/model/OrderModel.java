@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "\"order\"")
 @Getter
 @Setter
 public class OrderModel extends AuditingFields implements Serializable {
@@ -30,10 +30,10 @@ public class OrderModel extends AuditingFields implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "address_id")
-    @NotNull(message = "Delivery address is required")
+//    @NotNull(message = "Delivery address is required")
     private AddressModel address;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "order_status_id")
     @NotNull(message = "Order status is required")
     private OrderStatusModel orderStatus;
@@ -56,7 +56,7 @@ public class OrderModel extends AuditingFields implements Serializable {
     @Column(insertable = false, updatable = false)
     private LocalDateTime orderDate;
 
-    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL)
+    @OneToMany
+    @JoinColumn(name = "order_id")
     private List<OrderItemModel> orderItems = new ArrayList<>();
-
 }

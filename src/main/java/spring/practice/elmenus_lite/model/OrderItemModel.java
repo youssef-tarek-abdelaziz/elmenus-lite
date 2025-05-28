@@ -22,7 +22,7 @@ public class OrderItemModel extends AuditingFields implements Serializable {
     @JoinColumn(name = "order_id")
     private OrderModel order;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "menu_item_id")
     private MenuItemModel menuItem;
 
