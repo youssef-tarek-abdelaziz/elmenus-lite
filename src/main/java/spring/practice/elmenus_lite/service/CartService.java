@@ -12,12 +12,11 @@ import spring.practice.elmenus_lite.mapper.CartModelDtoMapper;
 import spring.practice.elmenus_lite.model.CartItemModel;
 import spring.practice.elmenus_lite.model.CartModel;
 import spring.practice.elmenus_lite.model.MenuItemModel;
-import spring.practice.elmenus_lite.model.UserModel;
 import spring.practice.elmenus_lite.repository.CartItemRepository;
-import spring.practice.elmenus_lite.repository.CartRepository;
 import spring.practice.elmenus_lite.repository.UserRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
-import spring.practice.elmenus_lite.util.CartItemValidator;
+import spring.practice.elmenus_lite.util.CartValidator;
+import spring.practice.elmenus_lite.util.MenuItemValidator;
 
 import java.util.*;
 
@@ -26,18 +25,17 @@ import java.util.*;
 public class CartService {
 
     private final CartItemRepository cartItemRepository;
-    private final CartRepository cartRepository;
     private final CartModelDtoMapper cartModelDtoMapper;
-    private final CartItemValidator cartItemValidator;
+    private final CartValidator cartValidator;
+    private final MenuItemValidator MenuItemValidator;
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public CartResponseDto getCartByCustomerId(Integer customerId) {
-        UserModel user = userRepository.findById(customerId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId))));
-
-        CartModel cartModel = cartRepository.findByCustomerId(customerId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId))));
+        if(userRepository.existsById(customerId)) {
+            throw new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId)));
+        }
+        CartModel cartModel = cartValidator.validateCartForSpecificCustomer(customerId);
 
         List<CartItemResponseDto> items = cartModelDtoMapper.toCartItemResponseDtoList(new ArrayList<>(cartModel.getCartItems()));
         return cartModelDtoMapper.maptoCartResponseDto(cartModel.getId(), items);
@@ -45,19 +43,17 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartResponseDto getAllItems(Integer cartId) {
-        CartModel cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
+        CartModel cartModel = cartValidator.validateCartForSpecificCustomer(cartId);
 
         List<CartItemResponseDto> items = cartModelDtoMapper
-                .toCartItemResponseDtoList(new ArrayList<>(cart.getCartItems()));
+                .toCartItemResponseDtoList(new ArrayList<>(cartModel.getCartItems()));
         return cartModelDtoMapper.maptoCartResponseDto(cartId, items);
     }
 
     @Transactional
     public void clearCart(Integer cartId) {
 
-        CartModel cartModel = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
+        CartModel cartModel = cartValidator.validateCartForSpecificCustomer(cartId);
 
         if(cartModel.getCartItems().isEmpty()) {
             throw new BadRequestException(ErrorMessage.EMPTY_CART.getFinalMessage(List.of(cartId)));
@@ -68,10 +64,9 @@ public class CartService {
 
     @Transactional
     public void addItemsToCart(Integer cartId, List<CartItemDto> cartItemDtos) {
-        CartModel cartModel = cartRepository.findById(cartId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.CART_NOT_FOUND.getFinalMessage(List.of(cartId))));
+        CartModel cartModel = cartValidator.validateCartForSpecificCustomer(cartId);
 
-        List<MenuItemModel> menuItemModels = cartItemValidator.validateMenuItems(cartItemDtos);
+        List<MenuItemModel> menuItemModels = MenuItemValidator.validateMenuItems(cartItemDtos.stream().map(CartItemDto::getMenuItemId).toList());
         Set<CartItemModel> existingItems = cartModel.getCartItems();
 
         for (CartItemDto newItem : cartItemDtos) {

@@ -7,7 +7,8 @@ import java.text.MessageFormat;
 @AllArgsConstructor
 public enum SuccessStatusCode {
     CART_ITEM_DELETED_SUCCESSFULLY("Cart deleted successfully"),
-    CART_ITEMS_ADDED_UPDATED_SUCCESSFULLY("Cart Items added/updated Successfully");
+    CART_ITEMS_ADDED_UPDATED_SUCCESSFULLY("Cart Items added/updated Successfully"),
+    ORDER_PLACED_SUCCESSFULLY("Order placed successfully");
 
     private final String messageTemplate;
 

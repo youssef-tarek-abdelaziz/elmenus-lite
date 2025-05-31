@@ -19,10 +19,10 @@ public class OrderItemModel extends AuditingFields implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderModel order;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "menu_item_id")
     private MenuItemModel menuItem;
 

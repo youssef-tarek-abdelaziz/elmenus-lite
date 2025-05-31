@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItemModel, Integer> {
-    List<MenuItemModel> findAllByIdIn(List<Integer> menuItemsIds);
+    List<MenuItemModel> findByIdIn(List<Integer> menuItemsIds);
 }
