@@ -12,7 +12,7 @@ import spring.practice.elmenus_lite.statusCode.ErrorMessage;
 public class CustomerValidator {
     private final CustomerRepository customerRepository;
 
-    CustomerModel checkCustomerExistence(Integer customerId) {
+    public CustomerModel checkCustomerExistence(Integer customerId) {
         return customerRepository.findById(customerId) .orElseThrow(() -> new BadRequestException(ErrorMessage.CUSTOMER_NOT_EXIST.getFinalMessage(customerId)));
     }
 }

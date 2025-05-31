@@ -30,7 +30,7 @@ public class OrderModel extends AuditingFields implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "address_id")
-//    @NotNull(message = "Delivery address is required")
+    @NotNull(message = "Delivery address is required")
     private AddressModel address;
 
     @OneToOne
@@ -38,7 +38,7 @@ public class OrderModel extends AuditingFields implements Serializable {
     @NotNull(message = "Order status is required")
     private OrderStatusModel orderStatus;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_tracking_id")
     private OrderTrackingModel orderTracking;
 
@@ -56,7 +56,6 @@ public class OrderModel extends AuditingFields implements Serializable {
     @Column(insertable = false, updatable = false)
     private LocalDateTime orderDate;
 
-    @OneToMany
-    @JoinColumn(name = "order_id")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemModel> orderItems = new ArrayList<>();
 }

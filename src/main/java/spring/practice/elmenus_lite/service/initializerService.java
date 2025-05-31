@@ -4,30 +4,26 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.practice.elmenus_lite.model.*;
-import spring.practice.elmenus_lite.repository.CartRepository;
-import spring.practice.elmenus_lite.repository.CustomerRepository;
-import spring.practice.elmenus_lite.repository.UserRepository;
-import spring.practice.elmenus_lite.repository.UserTypeRepository;
+import spring.practice.elmenus_lite.repository.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class CartInitializerService {
-
+public class initializerService {
+    private final OrderRepository orderRepository;
+    private final OrderStatusRepository orderStatusRepository;
+    private final OrderTrackingRepository orderTrackingRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final UserTypeRepository userTypeRepository;
+    private final AddressRepository addressRepository;
 
     @PostConstruct
     private void init() {
         cartRepository.deleteAll();
-        customerRepository.deleteAll();
-        userRepository.deleteAll();
-        userTypeRepository.deleteAll();
-
         CartModel cartModel = new CartModel();
         cartModel.setCustomer(getTempCustomer());
         cartModel.setCartItems(getTempCustomerItems(cartModel));
@@ -35,14 +31,14 @@ public class CartInitializerService {
     }
     private CustomerModel getTempCustomer() {
         UserTypeModel userType = new UserTypeModel();
-        userType.setUserTypeName("customer");
+        userType.setUserTypeName("customer" + Math.random());
         userTypeRepository.save(userType);
 
         UserModel user = new UserModel();
         user.setFirstName("Ali");
         user.setLastName("Sami");
         user.setFullName("Ali Sami");
-        user.setEmail("customer@email.com");
+        user.setEmail("customer" + Math.random() + "@email.com");
         user.setEnabled(true);
         user.setPassword("temppassword");
         user.setUserType(userType);

@@ -1,24 +1,27 @@
 package spring.practice.elmenus_lite.util;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import spring.practice.elmenus_lite.model.OrderModel;
-import spring.practice.elmenus_lite.model.PromotionModel;
+import spring.practice.elmenus_lite.model.*;
+import spring.practice.elmenus_lite.service.OrderStatusService;
 
 import java.math.BigDecimal;
 
 @Component
+@RequiredArgsConstructor
 public class OrderUtility {
-    public OrderModel calculateOrderPrice(OrderModel orderModel, PromotionModel promotionModel) {
-        BigDecimal totalPrice = orderModel.getOrderItems()
-                .stream()
-                .map(orderItem -> orderItem.getUnitPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())) )
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        double discountAmount = (promotionModel.getDiscountPercent().doubleValue() / 100 ) * totalPrice.doubleValue();
-        if(discountAmount > promotionModel.getMaxDiscount().doubleValue()) {
-            discountAmount = promotionModel.getMaxDiscount().doubleValue();
+
+    private final OrderStatusService orderStatusService;
+
+    public OrderModel setupOrderForSaving(OrderModel orderModel, AddressModel addressModel) {
+        for (OrderItemModel orderItem : orderModel.getOrderItems()) {
+            orderItem.setOrder(orderModel);
         }
-        orderModel.setTotal(BigDecimal.valueOf(totalPrice.doubleValue() - discountAmount));
-        orderModel.setDiscountAmount(BigDecimal.valueOf(discountAmount));
+        OrderStatusModel orderStatusModel = orderStatusService.findInitialOrderStatus();
+        orderModel.setOrderStatus(orderStatusModel);
+        orderModel.getOrderTracking().setOrderModel(orderModel);
+        orderModel.setAddress(addressModel);
         return orderModel;
     }
+
 }

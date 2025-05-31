@@ -2,11 +2,9 @@ package spring.practice.elmenus_lite.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import spring.practice.elmenus_lite.dto.AddressDto;
 import spring.practice.elmenus_lite.dto.OrderDto;
 import spring.practice.elmenus_lite.dto.OrderItemDto;
-import spring.practice.elmenus_lite.dto.OrderValidationResultDto;
-import spring.practice.elmenus_lite.model.AddressModel;
+import spring.practice.elmenus_lite.dto.OrderValidationSuccessResultDro;
 import spring.practice.elmenus_lite.model.MenuItemModel;
 import spring.practice.elmenus_lite.model.OrderItemModel;
 import spring.practice.elmenus_lite.model.OrderModel;
@@ -21,9 +19,9 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface OrderModelDtoMapper {
     @Mapping(target = "orderItems", expression = "java(mapOrderItemDtosToModels(orderDto.getItems(), orderValidationDto.getMenuItems()))")
-    @Mapping(target = "address", expression = "java(mapAddressApiDtoToDto(orderDto.getAddress()))")
-    @Mapping(target = "orderStatus", expression = "java(new spring.practice.elmenus_lite.model.OrderStatusModel (spring.practice.elmenus_lite.enums.OrderStatus.PENDING.name()))")
-    OrderModel mapOrderDtoToModel(OrderDto orderDto, OrderValidationResultDto orderValidationDto);
+    @Mapping(target = "orderTracking", expression = "java(new spring.practice.elmenus_lite.model.OrderTrackingModel (java.time.Duration.ofHours(2)))")
+    @Mapping(target = "address", source = "orderValidationDto.addressModel")
+    OrderModel mapOrderDtoToModel(OrderDto orderDto, OrderValidationSuccessResultDro orderValidationDto);
 
     default List<OrderItemModel> mapOrderItemDtosToModels(List<OrderItemDto> orderItemDtos, List<MenuItemModel> menuItemModels) {
         List<OrderItemModel> orderItemModels = new ArrayList<>();
@@ -38,6 +36,4 @@ public interface OrderModelDtoMapper {
         return orderItemModels;
     }
 
-    @Mapping(target = "location", ignore = true)
-    AddressModel mapAddressApiDtoToDto(AddressDto address);
 }

@@ -2,13 +2,11 @@ package spring.practice.elmenus_lite.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import spring.practice.elmenus_lite.dto.CartItemDto;
 import spring.practice.elmenus_lite.exception.BadRequestException;
 import spring.practice.elmenus_lite.model.MenuItemModel;
 import spring.practice.elmenus_lite.repository.MenuItemRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -19,7 +17,7 @@ public class MenuItemValidator {
 
     public List<MenuItemModel> validateMenuItems(List<Integer> menuItemsIds) {
         List<MenuItemModel> menuItemModels = menuItemRepository.findByIdIn(menuItemsIds);
-        List<Integer> menusIdsNotExist = menuItemModels.isEmpty() ? new ArrayList<>() : menuItemsIds.stream()
+        List<Integer> menusIdsNotExist = menuItemModels.isEmpty() ? menuItemsIds : menuItemsIds.stream()
                 .mapToInt(Integer::intValue)
                 .filter(menuItemsId -> menuItemModels.stream()
                         .noneMatch(menuItemModel -> menuItemModel.getId().equals(menuItemsId)))
