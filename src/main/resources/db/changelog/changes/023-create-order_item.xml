@@ -50,7 +50,7 @@
                 baseTableName="order_item"
                 baseColumnNames="order_id"
                 constraintName="fk_order_item_order"
-                referencedTableName="order"
+                referencedTableName="orders"
                 referencedColumnNames="id"
                 onDelete="CASCADE"
         />

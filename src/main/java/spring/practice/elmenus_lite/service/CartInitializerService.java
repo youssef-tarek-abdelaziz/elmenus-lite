@@ -3,12 +3,12 @@ package spring.practice.elmenus_lite.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.practice.elmenus_lite.model.*;
-import spring.practice.elmenus_lite.repository.CartRepository;
-import spring.practice.elmenus_lite.repository.CustomerRepository;
-import spring.practice.elmenus_lite.repository.UserRepository;
-import spring.practice.elmenus_lite.repository.UserTypeRepository;
+import spring.practice.elmenus_lite.repository.*;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,18 +21,75 @@ public class CartInitializerService {
     private final CustomerRepository customerRepository;
     private final UserTypeRepository userTypeRepository;
 
+    private final AddressRepository addressRepository;
+    private final OrderStatusRepository orderStatusRepository;
+    private final OrderTrackingRepository orderTrackingRepository;
+    private final OrderRepository orderRepository;
+
     @PostConstruct
     private void init() {
+        orderRepository.deleteAll();
+        addressRepository.deleteAll();
+        orderTrackingRepository.deleteAll();
         cartRepository.deleteAll();
         customerRepository.deleteAll();
         userRepository.deleteAll();
         userTypeRepository.deleteAll();
 
         CartModel cartModel = new CartModel();
-        cartModel.setCustomer(getTempCustomer());
+        CustomerModel customerModel = getTempCustomer();
+        cartModel.setCustomer(customerModel);
         cartModel.setCartItems(getTempCustomerItems(cartModel));
         cartRepository.save(cartModel);
+
+        createOrder(customerModel);
     }
+
+    private void createOrder(CustomerModel customerModel) {
+        AddressModel addressModel = AddressModel
+                .builder()
+                .customer(customerModel)
+                .label("label")
+                .street("street")
+                .city("city")
+                .floor("floor")
+                .apartment("apartment")
+                .additionalDirection("direction")
+                .state("state")
+                .country("country")
+                .zipCode("zipCode")
+                .isDefault(true)
+                .location(null)
+                .build();
+
+        addressRepository.save(addressModel);
+
+        OrderStatusModel orderStatusModel = orderStatusRepository.findByOrderStatus(OrderStatusEnum.PENDING).orElse(null);
+
+        OrderTrackingModel orderTracking = OrderTrackingModel
+                .builder()
+                .currentLocation(null)
+                .estimatedTime(30)
+                .build();
+        orderTrackingRepository.save(orderTracking);
+
+        OrderModel orderModel = OrderModel
+                .builder()
+                .customer(customerModel)
+                .address(addressModel)
+                .orderStatus(orderStatusModel)
+                .orderTracking(orderTracking)
+                .promotion(null)
+                .discountAmount(BigDecimal.ZERO)
+                .subtotal(BigDecimal.ZERO)
+                .total(BigDecimal.ZERO)
+                .build();
+
+        orderRepository.save(orderModel);
+
+    }
+
+
     private CustomerModel getTempCustomer() {
         UserTypeModel userType = new UserTypeModel();
         userType.setUserTypeName("customer");

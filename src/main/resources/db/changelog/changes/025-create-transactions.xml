@@ -59,7 +59,7 @@
                 baseTableName="transactions"
                 baseColumnNames="order_id"
                 constraintName="fk_transactions_order"
-                referencedTableName="order"
+                referencedTableName="orders"
                 referencedColumnNames="id"
         />
 
