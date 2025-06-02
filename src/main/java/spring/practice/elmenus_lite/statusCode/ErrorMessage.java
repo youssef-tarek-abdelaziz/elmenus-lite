@@ -15,7 +15,9 @@ public enum ErrorMessage {
     RESTAURANT_IS_NOT_EXIST("Restaurant with id: {0} is not exist"),
     NOT_SAME_RESTAURANT("An order can only contain items from one restaurant"),
     OUTSIDE_PROMOTION_PERIOD("The provided order date: {0} is outside promotion date range"),
-    PLACE_ORDER_WITHOUT_ADDRESS("No address exist, please provide order address");
+    PLACE_ORDER_WITHOUT_ADDRESS("No address exist, please provide order address"),
+    ORDER_NOT_FOUND("Order with id: {0} doesn't exist"),
+    ORDERS_NOT_FOUND("No orders found for customer with id: {0}");
     private final String messageTemplate;
 
     public String getFinalMessage(Object... params) {

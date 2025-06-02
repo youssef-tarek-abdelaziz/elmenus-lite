@@ -1,19 +1,29 @@
 package spring.practice.elmenus_lite.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.practice.elmenus_lite.dto.OrderDto;
+import spring.practice.elmenus_lite.dto.OrderItemDto;
 import spring.practice.elmenus_lite.dto.OrderValidationSuccessResultDro;
+import spring.practice.elmenus_lite.exception.EntityNotFoundException;
 import spring.practice.elmenus_lite.mapper.OrderModelDtoMapper;
 import spring.practice.elmenus_lite.model.AddressModel;
+import spring.practice.elmenus_lite.model.CustomerModel;
 import spring.practice.elmenus_lite.model.OrderModel;
+import spring.practice.elmenus_lite.repository.CustomerRepository;
 import spring.practice.elmenus_lite.repository.OrderRepository;
+import spring.practice.elmenus_lite.statusCode.ErrorMessage;
+import spring.practice.elmenus_lite.util.CustomerValidator;
 import spring.practice.elmenus_lite.util.OrderUtility;
 import spring.practice.elmenus_lite.util.OrderValidator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +35,47 @@ public class OrderService {
     private final OrderUtility orderUtility;
     private final AddressService addressService;
     private final PromotionService promotionService;
+
+
+
+    @Transactional(readOnly = true)
+    public OrderDto getOrderDetails(Integer orderId) {
+        OrderModel orderModel = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));
+
+
+
+        List<OrderItemDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(new ArrayList<>(orderModel.getOrderItems()));
+        return orderModelDtoMapper.mapToOrderResponseDto( orderModel,items , orderModelDtoMapper.mapAddressToDto(orderModel.getAddress()));
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public Page<OrderDto> getAllOrders(Integer customerId , Pageable page) {
+
+
+        Page<OrderModel> customerOrders = orderRepository.findByCustomerId(customerId , page);
+
+        if (customerOrders.isEmpty()) {
+            throw new EntityNotFoundException(ErrorMessage.ORDERS_NOT_FOUND.getFinalMessage(List.of(customerId)));
+        }
+
+        return customerOrders.map( order -> {
+            List<OrderItemDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(
+                    new ArrayList<>(order.getOrderItems())
+            );
+
+            return orderModelDtoMapper.mapToOrderResponseDto(
+                    order,
+                    items,
+                    orderModelDtoMapper.mapAddressToDto(order.getAddress())
+            );
+        });
+
+    }
+
+
 
     @Transactional
     public void makeOrder(OrderDto orderDto) {
