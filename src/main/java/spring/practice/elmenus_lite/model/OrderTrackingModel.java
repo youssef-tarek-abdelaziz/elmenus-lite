@@ -1,7 +1,9 @@
 package spring.practice.elmenus_lite.model;
 
+import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
@@ -24,6 +26,14 @@ public class OrderTrackingModel extends AuditingFields implements Serializable {
     @Column(columnDefinition = "geography(Point, 4326)")
     private Point currentLocation;
 
-    //LocalTime
-    private Integer estimatedTime;
+    @Column(columnDefinition = "interval")
+    @Type(PostgreSQLIntervalType.class)
+    private Duration estimatedTime;
+
+    @OneToOne(mappedBy = "orderTracking", fetch = FetchType.LAZY)
+    private OrderModel orderModel;
+
+    public OrderTrackingModel(Duration estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
 }

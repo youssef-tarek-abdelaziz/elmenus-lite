@@ -20,7 +20,7 @@ public class MenuItemModel extends AuditingFields implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false)
+    @JoinColumn(name = "menu_id", nullable = false, insertable = false, updatable = false)
     private MenuModel menuModel;
 
     private String menuItemName;

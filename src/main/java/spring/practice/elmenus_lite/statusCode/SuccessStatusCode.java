@@ -8,7 +8,8 @@ import java.text.MessageFormat;
 public enum SuccessStatusCode {
     ORDER_STATUS_UPDATED_SUCCESSFULLY("Order status updated successfully"),
     CART_ITEM_DELETED_SUCCESSFULLY("Cart deleted successfully"),
-    CART_ITEMS_ADDED_UPDATED_SUCCESSFULLY("Cart Items added/updated Successfully");
+    CART_ITEMS_ADDED_UPDATED_SUCCESSFULLY("Cart Items added/updated Successfully"),
+    ORDER_PLACED_SUCCESSFULLY("Order placed successfully");
 
     private final String messageTemplate;
 

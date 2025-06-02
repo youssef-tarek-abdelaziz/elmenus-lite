@@ -12,8 +12,13 @@ public enum ErrorMessage {
     CART_NOT_FOUND("Cart with id: {0} doesn't exist"),
     EMPTY_CART("Cart with id: {0} doesn't has items"),
     USER_NOT_FOUND("User with id: {0} doesn't exist"),
-    MENU_ITEM_IS_NOT_EXIST("Menu Item(s) with [id: {0}, Name: {1}] are not exist");
-
+    MENU_ITEM_IS_NOT_EXIST("Menu Item(s) with id {0} are not exist"),
+    CUSTOMER_NOT_EXIST("Customer with id: {0} is not exist"),
+    PROMOTION_CODE_IS_NOT_EXIST("Promotion code: {0} is not not valid"),
+    RESTAURANT_IS_NOT_EXIST("Restaurant with id: {0} is not exist"),
+    NOT_SAME_RESTAURANT("An order can only contain items from one restaurant"),
+    OUTSIDE_PROMOTION_PERIOD("The provided order date: {0} is outside promotion date range"),
+    PLACE_ORDER_WITHOUT_ADDRESS("No address exist, please provide order address");
     private final String messageTemplate;
 
     public String getFinalMessage(Object... params) {

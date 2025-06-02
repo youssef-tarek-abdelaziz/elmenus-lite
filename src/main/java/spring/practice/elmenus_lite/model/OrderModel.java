@@ -35,16 +35,16 @@ public class OrderModel extends AuditingFields implements Serializable {
     @NotNull(message = "Delivery address is required")
     private AddressModel address;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "order_status_id")
     @NotNull(message = "Order status is required")
     private OrderStatusModel orderStatus;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_tracking_id")
     private OrderTrackingModel orderTracking;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "promotion_id")
     private PromotionModel promotion;
 
@@ -58,7 +58,6 @@ public class OrderModel extends AuditingFields implements Serializable {
     @Column(insertable = false, updatable = false)
     private LocalDateTime orderDate;
 
-    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemModel> orderItems = new ArrayList<>();
-
 }
