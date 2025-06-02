@@ -21,9 +21,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    @ExceptionHandler(InvalidOrderStatusTransitionException.class)
-    public ResponseEntity<ApiResponse<Void>> handleInvalidOrderStatusTransition(InvalidOrderStatusTransitionException exception) {
-        ApiResponse<Void> response = new ApiResponse<>(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
 }

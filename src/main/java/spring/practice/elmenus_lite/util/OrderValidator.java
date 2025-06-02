@@ -7,11 +7,10 @@ import spring.practice.elmenus_lite.dto.OrderDto;
 import spring.practice.elmenus_lite.dto.OrderItemDto;
 import spring.practice.elmenus_lite.dto.OrderValidationSuccessResultDro;
 import spring.practice.elmenus_lite.exception.BadRequestException;
-import spring.practice.elmenus_lite.model.AddressModel;
-import spring.practice.elmenus_lite.model.CustomerModel;
-import spring.practice.elmenus_lite.model.MenuItemModel;
-import spring.practice.elmenus_lite.model.PromotionModel;
+import spring.practice.elmenus_lite.exception.EntityNotFoundException;
+import spring.practice.elmenus_lite.model.*;
 import spring.practice.elmenus_lite.repository.AddressRepository;
+import spring.practice.elmenus_lite.repository.OrderRepository;
 import spring.practice.elmenus_lite.statusCode.ErrorMessage;
 
 import java.util.List;
@@ -25,6 +24,12 @@ public class OrderValidator {
     private final PromotionValidator promotionValidator;
     private final MenuItemValidator menuItemValidator;
     private final AddressRepository addressRepository;
+    private final OrderRepository orderRepository;
+
+    public OrderModel validateByOrderId(Integer orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));
+    }
 
     public OrderValidationSuccessResultDro validateOrderInfo(OrderDto orderDto) {
         CustomerModel customerModel = customerValidator.checkCustomerExistence(orderDto.getCustomerId());

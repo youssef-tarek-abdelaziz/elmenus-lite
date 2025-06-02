@@ -3,8 +3,9 @@ package spring.practice.elmenus_lite.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import spring.practice.elmenus_lite.constants.OrderStatus;
+import spring.practice.elmenus_lite.exception.BadRequestException;
 import spring.practice.elmenus_lite.exception.EntityNotFoundException;
-import spring.practice.elmenus_lite.exception.InvalidOrderStatusTransitionException;
 import spring.practice.elmenus_lite.dto.OrderDto;
 import spring.practice.elmenus_lite.dto.OrderValidationSuccessResultDro;
 import spring.practice.elmenus_lite.mapper.OrderModelDtoMapper;
@@ -33,38 +34,28 @@ public class OrderService {
     private final PromotionService promotionService;
     private final OrderStatusRepository orderStatusRepository;
 
+    @Transactional
     public void updateOrderStatus(Integer orderId, String newStatusName) {
-
-        OrderModel order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));
+        OrderModel order = orderValidator.validateByOrderId(orderId);
         String currentStatus = order.getOrderStatus().getOrderStatusName();
 
         String statusName = newStatusName.toUpperCase();
         OrderStatusModel newStatus = orderStatusRepository.findByOrderStatusName(statusName)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.INVALID_ORDER_STATUS.getFinalMessage(List.of(statusName))));
 
-        if ( !canTransitionTo(currentStatus, statusName) ){
-            throw new InvalidOrderStatusTransitionException(ErrorMessage.INVALID_ORDER_STATUS_TRANSITION.getFinalMessage(List.of(statusName)));
+        if ( !orderUtility.canTransitionTo(currentStatus, statusName) ){
+            throw new BadRequestException(ErrorMessage.INVALID_ORDER_STATUS_TRANSITION.getFinalMessage(List.of(statusName)));
         }
 
-
-        if (!statusName.equals("CANCELLED")) {
+        if (!statusName.equals(OrderStatus.CANCELLED)) {
             String previousStatus = newStatus.getPreviousStatus().getOrderStatusName();
 
             if (!previousStatus.equals(currentStatus)) {
-                throw new InvalidOrderStatusTransitionException(ErrorMessage.INVALID_ORDER_STATUS_TRANSITION.getFinalMessage(List.of(statusName)));
+                throw new BadRequestException(ErrorMessage.INVALID_ORDER_STATUS_TRANSITION.getFinalMessage(List.of(statusName)));
             }
         }
-
         order.setOrderStatus(newStatus);
         orderRepository.save(order);
-    }
-
-    private boolean canTransitionTo(String currentStatus , String newStatus) {
-        if ( newStatus.equals("PENDING") || ( newStatus.equals("CANCELLED") && currentStatus.equals("DELIVERED") ) ){
-            return false;
-        }
-        return true;
     }
 
     @Transactional
