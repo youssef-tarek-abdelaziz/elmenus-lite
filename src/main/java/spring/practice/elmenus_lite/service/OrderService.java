@@ -41,8 +41,8 @@ public class OrderService {
                 .map(orderItem -> orderItem.getUnitPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())) )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal discountAmount = promotionService.getPromotionDiscount(orderModel.getPromotion(), totalPrice);
+        orderModel.setTotal(totalPrice);
         orderModel.setSubtotal(totalPrice.subtract(discountAmount));
-        orderModel.setTotal(totalPrice.subtract(discountAmount));
         orderModel.setDiscountAmount(discountAmount);
         orderRepository.save(orderModel);
     }
