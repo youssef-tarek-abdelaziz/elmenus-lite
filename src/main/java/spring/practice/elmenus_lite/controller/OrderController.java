@@ -6,8 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import spring.practice.elmenus_lite.model.OrderStatusEnum;
 import spring.practice.elmenus_lite.service.OrderService;
+import spring.practice.elmenus_lite.statusCode.SuccessStatusCode;
+import spring.practice.elmenus_lite.util.ApiResponse;
 
 @Controller
 @RequestMapping("/api/v1/orders")
@@ -16,12 +17,13 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PutMapping("/{orderId}/status/{statusId}")
-    public ResponseEntity<Void> updateOrderStatus(
+    @PutMapping("/{orderId}/status/{statusName}")
+    public ResponseEntity<?> updateOrderStatus(
             @PathVariable(name = "orderId") Integer orderId,
-            @PathVariable(name = "statusId") Integer statusId
+            @PathVariable(name = "statusName") String statusName
     ){
-        orderService.updateOrderStatus(orderId, statusId);
-        return ResponseEntity.noContent().build();
+        orderService.updateOrderStatus(orderId, statusName);
+        ApiResponse<?> response = new ApiResponse<>(SuccessStatusCode.ORDER_STATUS_UPDATED_SUCCESSFULLY.getFinalMessage());
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 
 @AllArgsConstructor
 public enum SuccessStatusCode {
+    ORDER_STATUS_UPDATED_SUCCESSFULLY("Order status updated successfully"),
     CART_ITEM_DELETED_SUCCESSFULLY("Cart deleted successfully"),
     CART_ITEMS_ADDED_UPDATED_SUCCESSFULLY("Cart Items added/updated Successfully");
 

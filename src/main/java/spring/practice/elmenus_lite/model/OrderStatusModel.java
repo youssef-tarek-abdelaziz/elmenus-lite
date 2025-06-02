@@ -19,7 +19,10 @@ public class OrderStatusModel extends AuditingFields implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "order_status_name", length = 50, nullable = false, unique = true)
-    @Enumerated(EnumType.STRING)
-    private OrderStatusEnum orderStatus;
+    @Column(length = 50, unique = true)
+    private String orderStatusName;
+
+    @ManyToOne
+    @JoinColumn(name = "previous_status_id")
+    private OrderStatusModel previousStatus;
 }

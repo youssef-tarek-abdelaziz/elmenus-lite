@@ -3,12 +3,10 @@ package spring.practice.elmenus_lite.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import spring.practice.elmenus_lite.model.*;
 import spring.practice.elmenus_lite.repository.*;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,7 +62,7 @@ public class CartInitializerService {
 
         addressRepository.save(addressModel);
 
-        OrderStatusModel orderStatusModel = orderStatusRepository.findByOrderStatus(OrderStatusEnum.PENDING).orElse(null);
+        OrderStatusModel orderStatusModel = orderStatusRepository.findByOrderStatusName("PENDING").orElse(null);
 
         OrderTrackingModel orderTracking = OrderTrackingModel
                 .builder()
