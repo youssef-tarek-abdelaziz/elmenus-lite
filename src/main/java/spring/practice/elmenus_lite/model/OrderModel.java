@@ -3,8 +3,7 @@ package spring.practice.elmenus_lite.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
@@ -17,6 +16,9 @@ import java.util.List;
 @Table(name = "\"order\"")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderModel extends AuditingFields implements Serializable {
 
     @Id

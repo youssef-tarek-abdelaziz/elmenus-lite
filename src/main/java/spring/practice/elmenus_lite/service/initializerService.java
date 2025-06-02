@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import spring.practice.elmenus_lite.model.*;
 import spring.practice.elmenus_lite.repository.*;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,12 +25,64 @@ public class initializerService {
 
     @PostConstruct
     private void init() {
+        orderRepository.deleteAll();
+        addressRepository.deleteAll();
+        orderTrackingRepository.deleteAll();
         cartRepository.deleteAll();
         CartModel cartModel = new CartModel();
-        cartModel.setCustomer(getTempCustomer());
+        CustomerModel customerModel = getTempCustomer();
+        cartModel.setCustomer(customerModel);
         cartModel.setCartItems(getTempCustomerItems(cartModel));
         cartRepository.save(cartModel);
+
+        createOrder(customerModel);
     }
+
+    private void createOrder(CustomerModel customerModel) {
+        AddressModel addressModel = AddressModel
+                .builder()
+                .customer(customerModel)
+                .label("label")
+                .street("street")
+                .city("city")
+                .floor("floor")
+                .apartment("apartment")
+                .additionalDirection("direction")
+                .state("state")
+                .country("country")
+                .zipCode("zipCode")
+                .isDefault(true)
+                .location(null)
+                .build();
+
+        addressRepository.save(addressModel);
+
+        OrderStatusModel orderStatusModel = orderStatusRepository.findByOrderStatusName("PENDING").orElse(null);
+
+        OrderTrackingModel orderTracking = OrderTrackingModel
+                .builder()
+                .currentLocation(null)
+                .estimatedTime(Duration.ofMinutes(30))
+                .build();
+        orderTrackingRepository.save(orderTracking);
+
+        OrderModel orderModel = OrderModel
+                .builder()
+                .customer(customerModel)
+                .address(addressModel)
+                .orderStatus(orderStatusModel)
+                .orderTracking(orderTracking)
+                .promotion(null)
+                .discountAmount(BigDecimal.ZERO)
+                .subtotal(BigDecimal.ZERO)
+                .total(BigDecimal.ZERO)
+                .build();
+
+        orderRepository.save(orderModel);
+
+    }
+
+
     private CustomerModel getTempCustomer() {
         UserTypeModel userType = new UserTypeModel();
         userType.setUserTypeName("customer" + Math.random());

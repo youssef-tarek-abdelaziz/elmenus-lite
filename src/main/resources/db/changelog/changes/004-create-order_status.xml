@@ -13,7 +13,11 @@
             </column>
 
             <column name="order_status_name" type="VARCHAR(50)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="previous_status_id" type="INT">
+                <constraints nullable="true"/>
             </column>
 
             <column name="created_at" type="datetime" defaultValueComputed="NOW()">
@@ -32,5 +36,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint baseTableName="order_status"
+                                 baseColumnNames="previous_status_id"
+                                 constraintName="fk_previous_status_id"
+                                 referencedTableName="order_status"
+                                 referencedColumnNames="id" />
     </changeSet>
 </databaseChangeLog>

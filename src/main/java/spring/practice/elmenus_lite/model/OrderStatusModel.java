@@ -1,9 +1,7 @@
 package spring.practice.elmenus_lite.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
@@ -12,17 +10,19 @@ import java.io.Serializable;
 @Setter
 @Table(name = "order_status")
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderStatusModel extends AuditingFields implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 50)
+    @Column(length = 50, unique = true)
     private String orderStatusName;
 
-    public OrderStatusModel(String orderStatusName) {
-        this.orderStatusName = orderStatusName;
-    }
+    @ManyToOne
+    @JoinColumn(name = "previous_status_id")
+    private OrderStatusModel previousStatus;
 }

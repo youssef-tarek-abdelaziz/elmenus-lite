@@ -2,9 +2,7 @@ package spring.practice.elmenus_lite.model;
 
 import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
@@ -16,7 +14,9 @@ import java.time.Duration;
 @Setter
 @Entity
 @Table(name = "order_tracking")
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderTrackingModel extends AuditingFields implements Serializable {
 
     @Id

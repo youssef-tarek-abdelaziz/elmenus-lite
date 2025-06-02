@@ -6,6 +6,9 @@ import java.text.MessageFormat;
 
 @AllArgsConstructor
 public enum ErrorMessage {
+    ORDER_NOT_FOUND("Order with id: {0} not found"),
+    INVALID_ORDER_STATUS("Invalid order status: {0}"),
+    INVALID_ORDER_STATUS_TRANSITION("Invalid order status transition: {0}"),
     CART_NOT_FOUND("Cart with id: {0} doesn't exist"),
     EMPTY_CART("Cart with id: {0} doesn't has items"),
     USER_NOT_FOUND("User with id: {0} doesn't exist"),

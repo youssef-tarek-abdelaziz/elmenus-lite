@@ -13,6 +13,6 @@ public class OrderStatusService {
 
    public OrderStatusModel findInitialOrderStatus() {
        // TODO: will be changed after define status_order column in the table
-       return orderStatusRepository.findAll().get(0);
+       return orderStatusRepository.findById(1).orElse(null);
    }
 }

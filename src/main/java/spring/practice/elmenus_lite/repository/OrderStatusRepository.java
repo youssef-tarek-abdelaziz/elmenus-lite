@@ -7,6 +7,7 @@ import spring.practice.elmenus_lite.model.OrderStatusModel;
 import java.util.Optional;
 
 @Repository
-public interface OrderStatusRepository extends JpaRepository<OrderStatusModel, Integer> {
-    Optional<OrderStatusModel> findByOrderStatusName(String statusName);
+public interface OrderStatusRepository extends JpaRepository<OrderStatusModel,Integer> {
+
+    Optional<OrderStatusModel> findByOrderStatusName(String orderStatusName);
 }
