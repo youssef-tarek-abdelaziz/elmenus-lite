@@ -1,0 +1,296 @@
+openapi: 3.0.1
+info:
+  title: Elmenus Lite Order API
+  version: 1.0.0
+  description: API for Elmenus Lite
+
+
+tags:
+  - name: Order
+    description: Operations related to customer orders
+  - name: Cart
+    description: Operations related to user carts
+
+
+paths:
+  /api/v1/cart/{customerId}:
+    get:
+      tags:
+        - Cart
+      summary: Get cart by customer ID
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the customer whose cart is being requested
+      responses:
+        '200':
+          description: Cart retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseCartResponseApiDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+  /api/v1/cart/{id}/items:
+    get:
+      tags:
+        - Cart
+      summary: Get all items in a cart by cart ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Cart ID
+      responses:
+        '200':
+          description: List of items in the cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    nullable: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItemResponseApiDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+  /api/v1/cart/{id}:
+    post:
+      tags:
+        - Cart
+      summary: post cart items to cart
+      operationId: addOrUpdateCartItems
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Cart ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CartItemRequestApiDto'
+      responses:
+        '200':
+          description: List of items in the cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    nullable: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItemResponseApiDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+  /api/v1/cart/{id}/clear:
+    delete:
+      tags:
+        - Cart
+      summary: delete all cart items
+      operationId: clearCart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Cart ID
+      responses:
+        '200':
+          description: List of items in the cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    nullable: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItemResponseApiDto'
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /api/v1/orders/:
+    post:
+      tags:
+        - Order
+      summary: Place a new order
+      description: Create a new order with customer info, items, and optional promotion code
+      operationId: makeOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderApiDto'
+      responses:
+        '200':
+          description: Order placed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
+components:
+  schemas:
+    OrderApiDto:
+      type: object
+      required:
+        - customerId
+        - items
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          example: 123
+        promotionCode:
+          type: string
+          example: WELCOME10
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemApiDto'
+        address:
+          $ref: '#/components/schemas/AddressApiDto'
+
+    OrderItemApiDto:
+      type: object
+      required:
+        - menuItemId
+        - quantity
+      properties:
+        menuItemId:
+          type: integer
+          format: int64
+          example: 45
+        quantity:
+          type: integer
+          example: 2
+
+    AddressApiDto:
+      type: object
+      properties:
+        street:
+          type: string
+          example: "123 Main St"
+        city:
+          type: string
+          example: "Cairo"
+        floor:
+          type: string
+          example: "2"
+        apartment:
+          type: string
+          example: "5B"
+        country:
+          type: string
+          example: "Egypt"
+        state:
+          type: string
+          example: "Giza"
+        location:
+          type: string
+          example: "29.9876, 31.2111"
+        isDefault:
+          type: boolean
+          example: true
+
+    ApiResponseCartResponseApiDto:
+      type: object
+      properties:
+        statusMessage:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/CartResponseApiDto'
+
+    CartResponseApiDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        cartItemApiDtoList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItemResponseApiDto'
+        totalPrice:
+          type: integer
+
+    CartItemResponseApiDto:
+      type: object
+      properties:
+        menuItemId:
+          type: integer
+        menuItemName:
+          type: string
+        quantity:
+          type: integer
+        totalPrice:
+          type: integer
+
+    CartItemRequestApiDto:
+      type: object
+      properties:
+        menuItemId:
+          type: integer
+        quantity:
+          type: integer
+        totalPrice:
+          type: integer
+
+    ApiResponse:
+      type: object
+      properties:
+        statusMessage:
+          type: string
+          example: "Order placed successfully"
+        data:
+          type: object
+          nullable: true
