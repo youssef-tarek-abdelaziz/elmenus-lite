@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface OrderModelDtoMapper {
 
-//    @Autowired
-//    AddressModelDtoMapper addressMapper;
 
     @Mapping(target = "orderItems", expression = "java(mapOrderItemDtosToModels(orderDto.getItems(), orderValidationDto.getMenuItems()))")
     @Mapping(target = "orderTracking", expression = "java(new spring.practice.elmenus_lite.model.OrderTrackingModel (java.time.Duration.ofHours(2)))")
@@ -62,11 +60,6 @@ public interface OrderModelDtoMapper {
     @Mapping(target = "location", ignore = true)
     AddressDto mapAddressToDto(AddressModel address);
 
-
-//    default List<AddressApiDto> mapAddressToList(AddressModel address) {
-//        if (address == null) return Collections.emptyList();
-//        return Collections.singletonList(addressMapper.toAddressApiResponseDto(address));
-//    }
 
 
 }

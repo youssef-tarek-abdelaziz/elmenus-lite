@@ -42,9 +42,6 @@ public class OrderService {
     public OrderDto getOrderDetails(Integer orderId) {
         OrderModel orderModel = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));
-
-
-
         List<OrderItemDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(new ArrayList<>(orderModel.getOrderItems()));
         return orderModelDtoMapper.mapToOrderResponseDto( orderModel,items , orderModelDtoMapper.mapAddressToDto(orderModel.getAddress()));
     }
