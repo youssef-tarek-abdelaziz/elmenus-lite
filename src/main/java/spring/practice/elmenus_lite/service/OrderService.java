@@ -40,8 +40,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderDto getOrderDetails(Integer orderId) {
-        OrderModel orderModel = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));
+        OrderModel orderModel = orderValidator.validateOrderExistance(orderId);
         List<OrderItemDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(new ArrayList<>(orderModel.getOrderItems()));
         return orderModelDtoMapper.mapToOrderResponseDto( orderModel,items , orderModelDtoMapper.mapAddressToDto(orderModel.getAddress()));
     }
@@ -51,14 +50,11 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<OrderDto> getAllOrders(Integer customerId , Pageable page) {
 
+//        CustomerModel customerModel = orderValidator.validateOrdersExistanceByCustomerId(customerId);
 
         Page<OrderModel> customerOrders = orderRepository.findByCustomerId(customerId , page);
 
-        if (customerOrders.isEmpty()) {
-            throw new EntityNotFoundException(ErrorMessage.ORDERS_NOT_FOUND.getFinalMessage(List.of(customerId)));
-        }
-
-        return customerOrders.map( order -> {
+        return customerOrders.map(order -> {
             List<OrderItemDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(
                     new ArrayList<>(order.getOrderItems())
             );

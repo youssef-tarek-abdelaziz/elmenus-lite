@@ -11,10 +11,7 @@
   - [Order Management](#order-management)
 - [Time Estimation vs. Actual](#time-estimation-vs-actual)
 - [API Endpoints](#api-endpoints)
-    - [1. Get Order Details](#1-get-order-details)
-    - [2. Get All Orders](#2-get-all-orders-by-customer-id)
-    - [3. Create a New Order](#3-create-a-new-order)
-    - [4. Update the Status of an Existing Order](#4-update-the-status-of-an-existing-order)
+    - [Open in Swagger Editor](#open-in-swagger-editor)
 
 ---
 
@@ -48,8 +45,8 @@
 
 
 ## API Endpoints
-> 
 
+> [Open in Swagger Editor](https://editor.swagger.io/?url=https://raw.githubusercontent.com/youssef-tarek-abdelaziz/elmenus-lite/blob/master/src/main/resources/swagger/api-contract.yaml)
 
 
 ---

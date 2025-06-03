@@ -15,6 +15,9 @@ import spring.practice.elmenus_lite.statusCode.SuccessStatusCode;
 import spring.practice.elmenus_lite.util.ApiResponse;
 import spring.practice.elmenus_lite.util.PageInfo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/orders/")
 @AllArgsConstructor
@@ -29,7 +32,7 @@ public class OrderController {
         OrderDto orderResponseDto = orderService.getOrderDetails(orderId);
         OrderApiDto orderResponseApiDto = orderApiDtoMapper.mapOrderResponseDtoToApiDto(orderResponseDto);
         ApiResponse<?> response = new ApiResponse<>(orderResponseApiDto);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(response.getData());
     }
 
 

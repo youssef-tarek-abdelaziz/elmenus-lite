@@ -7,5 +7,8 @@ import lombok.Setter;
 @Setter
 public class OrderItemApiDto {
     private Long menuItemId;
+    private String menuItemName;
     private int quantity;
+    private Integer totalPrice;
+    private String restaurantName;
 }

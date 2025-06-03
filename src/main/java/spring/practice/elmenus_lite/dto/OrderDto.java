@@ -9,9 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderDto {
+    private Integer id;
+    private String restaurantName;
     private Integer customerId;
     private String promotionCode;
     private List<OrderItemDto> items;
     private AddressDto address;
     private LocalDateTime OrderDate;
+    private Integer totalPrice;
+    private String orderStatus;
+
 }
