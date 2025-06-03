@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: Elmenus Lite Order API
+  title: Elmenus Lite API
   version: 1.0.0
   description: API for Elmenus Lite
 
@@ -151,6 +151,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
+  /api/v1/orders/{orderId}/status/{statusName}:
+    put:
+      tags:
+        - Order
+      summary: Update Order Status
+      description: Updates an order’s status, enforcing valid transitions in the order lifecycle, Supports cancellation at any stage.
+      operationId: updateOrderStatus
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: ID of the order to update
+          schema:
+            type: integer
+            example: 8
+        - name: statusName
+          in: path
+          required: true
+          description: New status to set for the order (e.g., PREPARING, CANCELLED)
+          schema:
+            type: string
+            example: READY_FOR_PICKUP
+      responses:
+        '200':
+          description: Order status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input or invalid status transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '404':
+          description: Order or status not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+
   /api/v1/orders/:
     post:
       tags:
