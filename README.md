@@ -9,7 +9,7 @@
 - [Features](#features)
   - [Cart Management](#cart-management)
   - [Order Management](#order-management)
-- [Time Estimation vs. Actual](#time-estimation-vs-actual)
+- [Technology Stack](#technology-stack)
 - [API Endpoints](#api-endpoints)
     - [Open in Swagger Editor](#open-in-swagger-editor)
 
