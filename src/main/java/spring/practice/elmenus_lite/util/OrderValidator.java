@@ -48,4 +48,13 @@ public class OrderValidator {
         }
         return new OrderValidationSuccessResultDro(customerModel, promotionModel, meuItems, addressModel);
     }
+
+    public OrderModel validateOrderExistance(Integer orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));
+    }
+
+    public CustomerModel validateOrdersExistanceByCustomerId(Integer customerId) {
+        return customerValidator.checkCustomerExistence(customerId);
+    }
 }
