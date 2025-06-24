@@ -3,6 +3,8 @@ package spring.practice.elmenus_lite.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.practice.elmenus_lite.dto.RegisterDto;
+import spring.practice.elmenus_lite.exception.BadRequestException;
+import spring.practice.elmenus_lite.exception.EntityNotFoundException;
 import spring.practice.elmenus_lite.model.UserModel;
 import spring.practice.elmenus_lite.model.UserTypeModel;
 import spring.practice.elmenus_lite.repository.UserRepository;
@@ -18,12 +20,12 @@ public class AuthService {
     public void register(RegisterDto request){
         if(userRepository.existsByEmail(request.getEmail())){
             //TODO CUSTOM EXCEPTION HANDLER
-            throw new IllegalArgumentException("Email already used");
+            throw new BadRequestException("Email already used");
         }
 
         //TODO CUSTOM EXCEPTION HANDLER
         UserTypeModel userType = userTypeRepository.findById(request.getUserTypeId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user type"));
+                .orElseThrow(() -> new EntityNotFoundException("Invalid user type"));
 
         UserModel user = new UserModel();
         user.setEmail(request.getEmail());
