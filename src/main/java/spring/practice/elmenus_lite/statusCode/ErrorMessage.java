@@ -16,6 +16,8 @@ public enum ErrorMessage {
     CUSTOMER_NOT_EXIST("Customer with id: {0} is not exist"),
     PROMOTION_CODE_IS_NOT_EXIST("Promotion code: {0} is not not valid"),
     RESTAURANT_IS_NOT_EXIST("Restaurant with id: {0} is not exist"),
+    NO_RESTAURANTS_FOUND("No restaurants found"),
+    RESTAURANT_DETAILS_NOT_EXIST("Restaurant details with id: {0} is not exist"),
     NOT_SAME_RESTAURANT("An order can only contain items from one restaurant"),
     OUTSIDE_PROMOTION_PERIOD("The provided order date: {0} is outside promotion date range"),
     PLACE_ORDER_WITHOUT_ADDRESS("No address exist, please provide order address");
