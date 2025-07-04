@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import spring.practice.elmenus_lite.dto.LoginResponseDto;
 import spring.practice.elmenus_lite.dto.RegisterDto;
 import spring.practice.elmenus_lite.dto.LoginDto;
 import spring.practice.elmenus_lite.service.AuthService;
@@ -25,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDto> login(@Valid @RequestBody LoginDto request){
-      return ResponseEntity.ok(request);
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto request){
+        return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/register")
