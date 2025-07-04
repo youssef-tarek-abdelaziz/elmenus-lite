@@ -13,7 +13,7 @@ import spring.practice.elmenus_lite.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
 
