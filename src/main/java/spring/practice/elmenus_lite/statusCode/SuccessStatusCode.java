@@ -12,7 +12,13 @@ public enum SuccessStatusCode {
     ORDER_PLACED_SUCCESSFULLY("Order placed successfully"),
     RESTAURANT_DELETED_SUCCESSFULLY("Restaurant deleted successfully"),
     RESTAURANT_CREATED_SUCCESSFULLY("Restaurant created successfully"),
-    RESTAURANT_UPDATED_SUCCESSFULLY("Restaurant updated successfully");
+    RESTAURANT_UPDATED_SUCCESSFULLY("Restaurant updated successfully"),
+    MENU_ADDED_SUCCESSFULLY("Menu added successfully"),
+    MENU_ITEM_ADDED_SUCCESSFULLY("Menu item added successfully"),
+    MENU_NAME_UPDATED_SUCCESSFULLY("Menu name updated successfully"),
+    MENU_ITEM_UPDATED_SUCCESSFULLY("Menu item updated successfully"),
+    MENU_DELETED_SUCCESSFULLY("Menu deleted successfully"),
+    MENU_ITEM_DELETED_SUCCESSFULLY("Menu item deleted successfully");
 
     private final String messageTemplate;
 

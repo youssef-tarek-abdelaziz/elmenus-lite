@@ -43,8 +43,7 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartResponseDto getAllItems(Integer cartId) {
-        CartModel cartModel = cartValidator.validateCartForSpecificCustomer(cartId);
-
+        CartModel cartModel = cartValidator.validateCartExistence(cartId);
         List<CartItemResponseDto> items = cartModelDtoMapper
                 .toCartItemResponseDtoList(new ArrayList<>(cartModel.getCartItems()));
         return cartModelDtoMapper.maptoCartResponseDto(cartId, items);

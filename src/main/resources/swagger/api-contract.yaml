@@ -11,6 +11,12 @@ tags:
   - name: Cart
     description: Operations related to user carts
 
+  - name: Menu
+    description: Operations related to menus creation, update and management
+
+  - name: Menu Item
+    description: Operations related to menu items management and customization
+
 
 paths:
   /api/v1/cart/{customerId}:
@@ -297,6 +303,410 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
 
+
+
+  /api/v1/menus/restaurant/{restaurantId}/all-menus:
+    get:
+      tags:
+        - Menu
+      summary: Get all menus by restaurant ID
+      description: Retrieves a paginated list of all menus and details for a specific restaurant.
+      operationId: getAllMenusForRestaurant
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 23
+          description: ID of the restaurant
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Page number for pagination
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Page size (number of items per page)
+      responses:
+        '200':
+          description: Restaurant's menus retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedMenuApiResponse'
+        '404':
+          description: Restaurant is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Restaurant with id 23 is not found"
+                  data:
+                    type: object
+                    nullable: true
+
+  /api/v1/menus/{menuId}:
+    get:
+      tags:
+        - Menu
+      summary: Get menu's details by menu id
+      description: Retrieves a paginated list of all items and details for a specific menu.
+      operationId: getMenuDetails
+      parameters:
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 23
+          description: ID of the menu
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: Page number for pagination
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: Total number of items in the menu
+          description: Page size (number of items per page)
+      responses:
+        '200':
+          description: Menu's Details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MenuApiDto'
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+        '404':
+          description: Menu is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu with id {23} is not found"
+                  data:
+                    type: object
+                    nullable: true
+
+    put:
+      tags:
+        - Menu
+      summary: Update menu name
+      description: Updates the name of a specific menu by its ID.
+      operationId: updateMenuName
+      parameters:
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 10
+          description: ID of the menu to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedMenuNameRequest'
+            example:
+              menuName: "New Updated Menu Title"
+      responses:
+        '200':
+          description: Menu name updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                statusMessage: "Menu name updated successfully"
+                data: null
+                page: null
+        '404':
+          description: Menu not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu with id 10 is not found"
+                  data:
+                    type: object
+                    nullable: true
+
+    delete:
+      summary: Delete a menu by ID
+      description: Deletes a specific menu using its ID.
+      tags:
+        - Menu
+      parameters:
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 12
+          description: ID of the menu to be deleted
+      responses:
+        '200':
+          description: Menu deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu deleted successfully"
+                  data:
+                    type: object
+                    nullable: true
+                  page:
+                    type: object
+                    nullable: true
+        '404':
+          description: Menu not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu with id 12 is not found"
+                  data:
+                    type: object
+                    nullable: true
+
+  /api/v1/menus:
+    post:
+      tags:
+        - Menu
+      summary: Add a new menu
+      description: Creates a new menu for a specific restaurant.
+      operationId: addNewMenu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuApiRequestDto'
+            example:
+              menuName: "compo menu"
+              restaurantId: 1
+      responses:
+        '200':
+          description: Menu added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu added successfully"
+                  data:
+                    type: object
+                    nullable: true
+                  page:
+                    type: object
+                    nullable: true
+        '404':
+          description: Restaurant not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Restaurant with id 1 not found"
+                  data:
+                    type: object
+                    nullable: true
+                  page:
+                    type: object
+                    nullable: true
+
+  /api/v1/menu-items/{menuItemId}:
+    get:
+      tags:
+        - Menu Item
+      summary: Get menu item details
+      description: Retrieves the details of a specific menu item by its ID.
+      operationId: getMenuItemDetails
+      parameters:
+        - name: menuItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the menu item
+      responses:
+        '200':
+          description: Menu item details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItemApiDto'
+        '404':
+          description: Menu item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu Item with id [7] is not found"
+                  data:
+                    type: object
+                    nullable: true
+                  page:
+                    type: object
+                    nullable: true
+
+    put:
+      tags:
+        - Menu Item
+      summary: Update menu item
+      description: Updates a menu item's details by its ID.
+      operationId: updateMenuItem
+      parameters:
+        - name: menuItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the menu item to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedMenuItemRequest'
+      responses:
+        '200':
+          description: Menu item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                statusMessage: "Menu item updated successfully"
+                data: null
+                page: null
+        '404':
+          description: Menu item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu Item with id [7] is not found"
+                  data:
+                    type: object
+                    nullable: true
+                  page:
+                    type: object
+                    nullable: true
+
+    delete:
+      tags:
+        - Menu Item
+      summary: Delete a menu item
+      description: Deletes a specific menu item by its ID.
+      operationId: deleteMenuItem
+      parameters:
+        - name: menuItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the menu item to be deleted
+      responses:
+        '200':
+          description: Menu item deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                statusMessage: "Menu item deleted successfully"
+                data: null
+                page: null
+        '404':
+          description: Menu item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusMessage:
+                    type: string
+                    example: "Menu Item with id [7] is not found"
+                  data:
+                    type: object
+                    nullable: true
+                  page:
+                    type: object
+                    nullable: true
+
+  /api/v1/menu-items:
+    post:
+      tags:
+        - Menu Item
+      summary: Add new menu item
+      description: Adds a new menu item.
+      operationId: addNewMenuItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemApiRequestDto'
+      responses:
+        '200':
+          description: Menu item added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                statusMessage: "Menu item added successfully"
+                data: null
+                page: null
+
+
+
+
 components:
   schemas:
     OrderApiDto:
@@ -429,3 +839,136 @@ components:
         totalPages:
           type: integer
           example: 4
+
+    MenuApiDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        menuName:
+          type: string
+          example: "Main Course"
+        restaurantName:
+          type: string
+          example: "Pizza pop"
+        menuItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItemDto'
+
+    MenuItemDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        itemName:
+          type: string
+          example: "Margherita Pizza"
+        price:
+          type: integer
+          example: 75
+        available:
+          type: boolean
+          example: true
+
+    PagedMenuApiResponse:
+      type: object
+      properties:
+        statusMessage:
+          type: string
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuApiDto'
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      example:
+        statusMessage: null
+        data:
+          - id: 6
+            menuName: "Lunch Specials"
+            restaurantName: "Pizza pop"
+            menuItems: []
+          - id: 7
+            menuName: "Dinner Delights"
+            restaurantName: "Pizza pop"
+            menuItems:
+              - id: 1
+                itemName: "Pepperoni"
+                price: 65
+                available: true
+        page:
+          size: 10
+          pageNumber: 1
+          totalElements: 20
+          totalPages: 2
+
+    MenuApiRequestDto:
+      type: object
+      properties:
+        menuName:
+          type: string
+          example: "compo menu"
+        restaurantId:
+          type: integer
+          example: 1
+
+    UpdatedMenuNameRequest:
+      type: object
+      properties:
+        menuName:
+          type: string
+          example: "New Menu Name"
+
+    MenuItemApiDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        itemName:
+          type: string
+          example: "Pepperoni Pizza"
+        price:
+          type: integer
+          example: 75
+        available:
+          type: boolean
+          example: true
+
+    MenuItemApiRequestDto:
+      type: object
+      required:
+        - menuId
+        - itemName
+        - price
+      properties:
+        menuId:
+          type: integer
+          example: 3
+        itemName:
+          type: string
+          example: "Margherita Pizza"
+        price:
+          type: integer
+          example: 50
+
+    UpdatedMenuItemRequest:
+      type: object
+      required:
+        - itemName
+        - price
+        - available
+      properties:
+        itemName:
+          type: string
+          example: "Updated Pizza Name"
+        price:
+          type: integer
+          example: 60
+        available:
+          type: boolean
+          example: false
