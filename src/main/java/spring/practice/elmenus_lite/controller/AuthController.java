@@ -1,41 +1,39 @@
 package spring.practice.elmenus_lite.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import spring.practice.elmenus_lite.dto.LoginResponseDto;
+import spring.practice.elmenus_lite.dto.RegisterDto;
+import spring.practice.elmenus_lite.dto.LoginDto;
+import spring.practice.elmenus_lite.service.AuthService;
 import org.springframework.web.bind.annotation.*;
-import spring.practice.elmenus_lite.dto.JwtResponse;
-import spring.practice.elmenus_lite.dto.LoginRequestDto;
-import spring.practice.elmenus_lite.service.JwtService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final AuthService authService;
+
+    @GetMapping("/user")
+    public ResponseEntity<String> getUser(){
+        return ResponseEntity.ok("get the user!");
+    }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequestDto loginRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        String token = jwtService.generateToken(loginRequest.getEmail());
-
-        return ResponseEntity.ok(new JwtResponse(token));
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginDto request){
+        return ResponseEntity.ok(authService.login(request));
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Void> handleBadCredentialsException() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterDto request) {
+        authService.register(request);
+        return ResponseEntity.ok("User registered successfully");
     }
+
 }
