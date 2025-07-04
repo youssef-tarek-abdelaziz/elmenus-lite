@@ -32,7 +32,7 @@ public class CartService {
 
     @Transactional(readOnly = true)
     public CartResponseDto getCartByCustomerId(Integer customerId) {
-        if(userRepository.existsById(customerId)) {
+        if(!userRepository.existsById(customerId)) {
             throw new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND.getFinalMessage(List.of(customerId)));
         }
         CartModel cartModel = cartValidator.validateCartForSpecificCustomer(customerId);
