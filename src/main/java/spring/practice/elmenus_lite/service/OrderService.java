@@ -1,15 +1,17 @@
 package spring.practice.elmenus_lite.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.practice.elmenus_lite.constants.OrderStatus;
+import spring.practice.elmenus_lite.dto.*;
 import spring.practice.elmenus_lite.exception.BadRequestException;
 import spring.practice.elmenus_lite.exception.EntityNotFoundException;
-import spring.practice.elmenus_lite.dto.OrderDto;
-import spring.practice.elmenus_lite.dto.OrderValidationSuccessResultDro;
 import spring.practice.elmenus_lite.mapper.OrderModelDtoMapper;
 import spring.practice.elmenus_lite.model.AddressModel;
+import spring.practice.elmenus_lite.model.CustomerModel;
 import spring.practice.elmenus_lite.model.OrderModel;
 import spring.practice.elmenus_lite.model.OrderStatusModel;
 import spring.practice.elmenus_lite.repository.OrderRepository;
@@ -20,6 +22,7 @@ import spring.practice.elmenus_lite.util.OrderValidator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,6 +36,37 @@ public class OrderService {
     private final AddressService addressService;
     private final PromotionService promotionService;
     private final OrderStatusRepository orderStatusRepository;
+
+    @Transactional(readOnly = true)
+    public OrderResponseDto getOrderDetails(Integer orderId) {
+        OrderModel orderModel = orderValidator.validateOrderExistance(orderId);
+        List<OrderItemResponseDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(new ArrayList<>(orderModel.getOrderItems()));
+        return orderModelDtoMapper.mapToOrderResponseDto( orderModel,items , orderModelDtoMapper.mapAddressToDto(orderModel.getAddress()));
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public Page<OrderResponseDto> getAllOrders(Integer customerId , Pageable page) {
+
+        CustomerModel customerModel = orderValidator.validateOrdersExistanceByCustomerId(customerId);
+
+        Page<OrderModel> customerOrders = orderRepository.findByCustomerId(customerId , page);
+
+        return customerOrders.map( order -> {
+            List<OrderItemResponseDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(
+                    new ArrayList<>(order.getOrderItems())
+            );
+
+            return orderModelDtoMapper.mapToOrderResponseDto(
+                    order,
+                    items,
+                    orderModelDtoMapper.mapAddressToDto(order.getAddress())
+            );
+        });
+
+    }
+
 
     @Transactional
     public void updateOrderStatus(Integer orderId, String newStatusName) {

@@ -9,6 +9,7 @@ import lombok.Setter;
 public class ApiResponse<T> {
     private String statusMessage;
     private T data;
+    private PageInfo page;
 
     public ApiResponse(String statusMessage, T data) {
         this.statusMessage = statusMessage;
@@ -21,6 +22,11 @@ public class ApiResponse<T> {
 
     public ApiResponse(T data) {
         this(null, data);
+    }
+
+    public ApiResponse(T data , PageInfo page) {
+        this.data = data;
+        this.page = page;
     }
 
 }

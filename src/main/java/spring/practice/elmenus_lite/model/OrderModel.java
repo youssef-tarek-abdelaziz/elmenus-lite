@@ -40,7 +40,7 @@ public class OrderModel extends AuditingFields implements Serializable {
     @NotNull(message = "Order status is required")
     private OrderStatusModel orderStatus;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
     @JoinColumn(name = "order_tracking_id")
     private OrderTrackingModel orderTracking;
 
