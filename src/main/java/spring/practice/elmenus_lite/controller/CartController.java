@@ -15,7 +15,7 @@ import spring.practice.elmenus_lite.util.ApiResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cart/")
+@RequestMapping("/api/v1/cart/")
 @AllArgsConstructor
 public class CartController {
 

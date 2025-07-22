@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,9 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponseDto getOrderDetails(Integer orderId) {
-        OrderModel orderModel = orderValidator.validateOrderExistance(orderId);
+//        OrderModel orderModel = orderValidator.validateOrderExistance(orderId);
+        OrderModel orderModel = orderRepository.findOrderById(orderId)
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.ORDER_NOT_FOUND.getFinalMessage(List.of(orderId))));;
         List<OrderItemResponseDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(new ArrayList<>(orderModel.getOrderItems()));
         return orderModelDtoMapper.mapToOrderResponseDto( orderModel,items , orderModelDtoMapper.mapAddressToDto(orderModel.getAddress()));
     }
@@ -51,8 +54,8 @@ public class OrderService {
 
         CustomerModel customerModel = orderValidator.validateOrdersExistanceByCustomerId(customerId);
 
+//        Page<OrderModel> customerOrders = orderRepository.findByCustomerId(customerId , page);
         Page<OrderModel> customerOrders = orderRepository.findByCustomerId(customerId , page);
-
         return customerOrders.map( order -> {
             List<OrderItemResponseDto> items = orderModelDtoMapper.toOrderItemResponseDtoList(
                     new ArrayList<>(order.getOrderItems())

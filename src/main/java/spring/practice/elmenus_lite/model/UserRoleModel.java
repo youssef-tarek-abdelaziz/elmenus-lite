@@ -1,7 +1,9 @@
 package spring.practice.elmenus_lite.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 import spring.practice.elmenus_lite.model.embededIds.UserRoleId;
@@ -10,6 +12,8 @@ import spring.practice.elmenus_lite.model.embededIds.UserRoleId;
 @Table(name = "user_role")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRoleModel extends AuditingFields {
 
     @EmbeddedId

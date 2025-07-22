@@ -19,12 +19,8 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserModel user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
-
-        System.out.println("Password in DB: " + user.getPassword());
-        System.out.println("Account enabled: " + user.getEnabled()); // make sure it's true
-        System.out.println("email: " + user.getEmail());
-
+        UserModel user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("User with email " + email + " not found"));
 
         return new User(
                 user.getEmail(),

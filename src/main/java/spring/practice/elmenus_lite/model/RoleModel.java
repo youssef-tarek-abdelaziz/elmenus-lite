@@ -23,7 +23,8 @@ public class RoleModel extends AuditingFields implements Serializable {
     private Integer id;
 
     @Column(nullable = false, unique = true, length = 50)
-    private String roleName;
+    @Enumerated(EnumType.STRING)
+    private Role roleName;
 
     @OneToMany(mappedBy = "role")
     private Set<UserRoleModel> userRoles;
