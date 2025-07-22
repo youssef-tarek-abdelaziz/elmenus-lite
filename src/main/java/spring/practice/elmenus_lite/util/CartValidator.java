@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class CartValidator {
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     public CartModel validateCartForSpecificCustomer(Integer customerId) {
         return cartRepository.findByCustomerId(customerId)

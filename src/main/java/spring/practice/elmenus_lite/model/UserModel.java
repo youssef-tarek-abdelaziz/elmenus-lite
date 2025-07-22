@@ -7,6 +7,7 @@ import spring.practice.elmenus_lite.model.auditing.AuditingFields;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -24,8 +25,8 @@ public class UserModel extends AuditingFields implements Serializable {
     @JoinColumn(name = "user_type_id", nullable = false)
     private UserTypeModel userType;
 
-    @OneToMany(mappedBy = "user")
-    private Set<UserRoleModel> userRoles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private Set<UserRoleModel> userRoles = new HashSet<>();
 
     @Column(nullable = false, unique = true)
     private String email;
